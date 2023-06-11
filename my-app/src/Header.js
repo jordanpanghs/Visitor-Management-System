@@ -12,8 +12,8 @@ function Header() {
         </div>
         <div className="flex flex-row text-base items-center">
           <ul className="hidden lg:flex space-x-8 mr-8">
-            {navItems.map((item, index) => (
-              <li key={index}>
+            {navItems.map((item) => (
+              <li key={item.id}>
                 <a
                   href={item.link}
                   className="hover:text-blue-500 duration-500"
@@ -37,11 +37,11 @@ function Header() {
 function NavItems() {
   //Navigation Link Items
   return [
-    { text: "Create User", link: "#" },
-    { text: "Register Special Visitor", link: "#" },
-    { text: "Visitations", link: "#" },
-    { text: "Parcels", link: "#" },
-    { text: "Registered Visitors", link: "#" },
+    { id: 1, text: "Create User", link: "#" },
+    { id: 2, text: "Register Special Visitor", link: "#" },
+    { id: 3, text: "Visitations", link: "#" },
+    { id: 4, text: "Parcels", link: "#" },
+    { id: 5, text: "Registered Visitors", link: "#" },
   ];
 }
 
@@ -127,8 +127,8 @@ function NavDropDown({ navItems }) {
           className="absolute right-0 mt-11 w-60 origin-top-right rounded-md bg-white shadow-lg 
       ring-1 ring-black ring-opacity-10 focus:outline-none px-1 py-1"
         >
-          {navItems.map((item, index) => (
-            <Menu.Item>
+          {navItems.map((item) => (
+            <Menu.Item key={item.id}>
               {({ active }) => (
                 <button
                   className={`${
@@ -168,13 +168,13 @@ function ProfileIcon() {
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
-        stroke-width="1.5"
+        strokeWidth="1.5"
         stroke="currentColor"
-        class="w-7 h-7"
+        className="w-7 h-7"
       >
         <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
         />
       </svg>
@@ -192,7 +192,7 @@ function NavBarIcon() {
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        class="h-7 w-7"
+        className="h-7 w-7"
       >
         <path
           d="M14 5C14 6.10457 13.1046 7 12 7C10.8954 7 10 6.10457 10 5C10 3.89543 10.8954 3 12 3C13.1046 3 14 3.89543 14 5Z"
