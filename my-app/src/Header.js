@@ -2,14 +2,32 @@ import React from "react";
 import { Menu, Transition } from "@headlessui/react";
 
 function Header() {
+  const navItems = NavItems();
+
   return (
     <header className="p-5 leading-6 px-10 text-xl font-[roboto] border-b border-slate-900/10">
-      <nav className="relative hidden lg:flex items-center ml-auto justify-between">
-        <div className="md:inline text-left cursor-pointer text-xl">
+      <nav className="flex-row flex relative items-center ml-auto justify-between">
+        <div className="inline text-left cursor-pointer text-lg">
           <span>Visitor Management System </span>
         </div>
-        <div className="flex flex-row text-md">
-          <NavItems></NavItems>
+        <div className="flex flex-row text-base items-center">
+          <ul className="hidden lg:flex space-x-8 mr-8">
+            {navItems.map((item, index) => (
+              <li key={index}>
+                <a
+                  href={item.link}
+                  className="hover:text-blue-500 duration-500"
+                >
+                  {item.text}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <ul className="lg:hidden items-center flex flex-row mr-8">
+            <NavDropDown navItems={navItems} />
+          </ul>
+
+          <UserDropDown />
         </div>
       </nav>
     </header>
@@ -17,38 +35,14 @@ function Header() {
 }
 
 function NavItems() {
-  return (
-    <ul className="flex space-x-8 items-center">
-      <li>
-        <a href="#" className="hover:text-blue-500 duration-500">
-          Create User
-        </a>
-      </li>
-      <li>
-        <a href="#" className="hover:text-blue-500 duration-500">
-          Register Special Visitor
-        </a>
-      </li>
-      <li>
-        <a href="#" className="hover:text-blue-500 duration-500">
-          Visitations
-        </a>
-      </li>
-      <li>
-        <a href="#" className="hover:text-blue-500 duration-500">
-          Parcels
-        </a>
-      </li>
-      <li>
-        <a href="#" className="hover:text-blue-500 duration-500">
-          Registered Visitors
-        </a>
-      </li>
-      <li>
-        <UserDropDown></UserDropDown>
-      </li>
-    </ul>
-  );
+  //Navigation Menu Selections and Links
+  return [
+    { text: "Create User", link: "#" },
+    { text: "Register Special Visitor", link: "#" },
+    { text: "Visitations", link: "#" },
+    { text: "Parcels", link: "#" },
+    { text: "Registered Visitors", link: "#" },
+  ];
 }
 
 function UserDropDown() {
@@ -66,7 +60,7 @@ function UserDropDown() {
         leaveTo="transform scale-95 opacity-0"
       >
         <Menu.Items
-          className="absolute right-0 mt-7 w-40 origin-top-right rounded-md bg-white shadow-lg 
+          className="absolute right-0 mt-11 w-40 origin-top-right rounded-md bg-white shadow-lg 
       ring-1 ring-black ring-opacity-10 focus:outline-none px-1 py-1"
         >
           <Menu.Item>
@@ -114,9 +108,60 @@ function UserDropDown() {
   );
 }
 
-function NavPopOver() {}
+function NavDropDown({ navItems }) {
+  //To render dropdown navigation link for small screen size
+  return (
+    <Menu>
+      <Menu.Button>
+        <NavBarIcon></NavBarIcon>
+      </Menu.Button>
+      <Transition
+        enter="transition duration-100 ease-out"
+        enterFrom="transform scale-95 opacity-0"
+        enterTo="transform scale-100 opacity-100"
+        leave="transition duration-75 ease-out"
+        leaveFrom="transform scale-100 opacity-100"
+        leaveTo="transform scale-95 opacity-0"
+      >
+        <Menu.Items
+          className="absolute right-0 mt-11 w-60 origin-top-right rounded-md bg-white shadow-lg 
+      ring-1 ring-black ring-opacity-10 focus:outline-none px-1 py-1"
+        >
+          {navItems.map((item, index) => (
+            <Menu.Item>
+              {({ active }) => (
+                <button
+                  className={`${
+                    active ? "bg-blue-400 text-white" : "text-gray-900"
+                  } group flex w-full justify-center rounded-md px-2 py-2 text-sm`}
+                >
+                  <a href={item.link}>{item.text}</a>
+                </button>
+              )}
+            </Menu.Item>
+          ))}
+
+          <Menu.Item>
+            {({ active }) => (
+              <button
+                className={`${
+                  active ? "bg-blue-400 text-white" : "text-gray-900"
+                } group flex w-full justify-center rounded-md px-2 py-2 text-sm`}
+              >
+                <a className="" href="#">
+                  Create User
+                </a>
+              </button>
+            )}
+          </Menu.Item>
+        </Menu.Items>
+      </Transition>
+    </Menu>
+  );
+}
 
 function ProfileIcon() {
+  //SVG for avatar icon
   return (
     <span className="flex items-center hover:text-blue-500 duration-500">
       <svg
@@ -138,15 +183,28 @@ function ProfileIcon() {
 }
 
 function NavBarIcon() {
+  //SVG for dropdown icon
   return (
     <span className="flex items-center hover:text-blue-500 duration-500">
-      <svg width="24" height="24" fill="none" aria-hidden="true">
+      <svg
+        width="800px"
+        height="800px"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-7 w-7"
+      >
         <path
-          d="M12 6v.01M12 12v.01M12 18v.01M12 7a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm0 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm0 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+          d="M14 5C14 6.10457 13.1046 7 12 7C10.8954 7 10 6.10457 10 5C10 3.89543 10.8954 3 12 3C13.1046 3 14 3.89543 14 5Z"
+          fill="#000000"
+        />
+        <path
+          d="M14 12C14 13.1046 13.1046 14 12 14C10.8954 14 10 13.1046 10 12C10 10.8954 10.8954 10 12 10C13.1046 10 14 10.8954 14 12Z"
+          fill="#000000"
+        />
+        <path
+          d="M12 21C13.1046 21 14 20.1046 14 19C14 17.8954 13.1046 17 12 17C10.8954 17 10 17.8954 10 19C10 20.1046 10.8954 21 12 21Z"
+          fill="#000000"
         />
       </svg>
     </span>
