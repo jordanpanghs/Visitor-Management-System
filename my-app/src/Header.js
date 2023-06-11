@@ -3,7 +3,9 @@ import React from "react";
 function Header() {
   return (
     <header>
-      <h1>My Header</h1>
+      <div className="bg-blue-500 text-white text-lg p-4">
+        Hello, Tailwind CSS!
+      </div>
     </header>
   );
 }
