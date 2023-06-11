@@ -35,7 +35,7 @@ function Header() {
 }
 
 function NavItems() {
-  //Navigation Menu Selections and Links
+  //Navigation Link Items
   return [
     { text: "Create User", link: "#" },
     { text: "Register Special Visitor", link: "#" },
