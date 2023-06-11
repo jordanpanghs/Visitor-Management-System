@@ -14,7 +14,7 @@ function Header() {
   );
 }
 
-export function NavItems() {
+function NavItems() {
   return (
     <ul className="flex align-center space-x-10">
       <li>
