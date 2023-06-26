@@ -3,7 +3,7 @@ import { Card, Typography } from "@material-tailwind/react";
 
 function Home() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen px-20">
+    <div className="flex flex-col justify-start min-h-screen px-20 py-10">
       <Table />
     </div>
   );
@@ -26,6 +26,54 @@ function Table() {
   const TABLE_ROWS_DATA = [
     {
       id: 1,
+      name: "John Doe",
+      driverLicense: "123456789",
+      licensePlate: "ABC123",
+      telephone: "1234567890",
+      address: "123 Main St",
+      entryTime: "2021-10-10 10:00:00",
+      exitTime: "2021-10-10 10:00:00",
+      visitDate: "2021-10-10",
+      visitedUnit: "B-123",
+    },
+    {
+      id: 2,
+      name: "John Doe",
+      driverLicense: "123456789",
+      licensePlate: "ABC123",
+      telephone: "1234567890",
+      address: "123 Main St",
+      entryTime: "2021-10-10 10:00:00",
+      exitTime: "2021-10-10 10:00:00",
+      visitDate: "2021-10-10",
+      visitedUnit: "B-123",
+    },
+    {
+      id: 3,
+      name: "John Doe",
+      driverLicense: "123456789",
+      licensePlate: "ABC123",
+      telephone: "1234567890",
+      address: "123 Main St",
+      entryTime: "2021-10-10 10:00:00",
+      exitTime: "2021-10-10 10:00:00",
+      visitDate: "2021-10-10",
+      visitedUnit: "B-123",
+    },
+    {
+      id: 4,
+      name: "John Doe",
+      driverLicense: "123456789",
+      licensePlate: "ABC123",
+      telephone: "1234567890",
+      address: "123 Main St",
+      entryTime: "2021-10-10 10:00:00",
+      exitTime: "2021-10-10 10:00:00",
+      visitDate: "2021-10-10",
+      visitedUnit: "B-123",
+    },
+    {
+      id: 5,
       name: "John Doe",
       driverLicense: "123456789",
       licensePlate: "ABC123",
