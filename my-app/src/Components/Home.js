@@ -10,7 +10,20 @@ function Home() {
 }
 
 function Table() {
-  const data = [
+  const TABLE_HEAD = [
+    "Record No.",
+    "Name",
+    "Driver License Number",
+    "License Plate Number",
+    "Telephone Number",
+    "Address",
+    "Entry Time",
+    "Exit Time",
+    "Visit Date",
+    "Visited Unit",
+    "",
+  ];
+  const TABLE_ROWS_DATA = [
     {
       id: 1,
       name: "John Doe",
@@ -28,35 +41,147 @@ function Table() {
   return (
     <Card className="overflow-scroll h-full w-full">
       <table className="w-full min-w-max table-auto text-left">
-        <thead className="justify-left">
+        <thead>
           <tr>
-            <th className="px-4 py-2">Record No.</th>
-            <th className="px-4 py-2">Name</th>
-            <th className="px-4 py-2">Driver License Number</th>
-            <th className="px-4 py-2">License Plate Number</th>
-            <th className="px-4 py-2">Telephone Number</th>
-            <th className="px-4 py-2">Address</th>
-            <th className="px-4 py-2">Entry Time</th>
-            <th className="px-4 py-2">Exit Time</th>
-            <th className="px-4 py-2">Visit Date</th>
-            <th className="px-4 py-2">Visited Unit</th>
+            {TABLE_HEAD.map((head) => (
+              <th
+                key={head}
+                className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
+              >
+                <Typography
+                  variant="small"
+                  color="blue-gray"
+                  className="font-normal leading-none opacity-70"
+                >
+                  {head}
+                </Typography>
+              </th>
+            ))}
           </tr>
         </thead>
+
         <tbody>
-          {data.map((item) => (
-            <tr key={item.id}>
-              <td className="px-4 py-2">{item.id}</td>
-              <td className="px-4 py-2">{item.name}</td>
-              <td className="px-4 py-2">{item.driverLicense}</td>
-              <td className="px-4 py-2">{item.licensePlate}</td>
-              <td className="px-4 py-2">{item.telephone}</td>
-              <td className="px-4 py-2">{item.address}</td>
-              <td className="px-4 py-2">{item.entryTime}</td>
-              <td className="px-4 py-2">{item.exitTime}</td>
-              <td className="px-4 py-2">{item.visitDate}</td>
-              <td className="px-4 py-2">{item.visitedUnit}</td>
-            </tr>
-          ))}
+          {TABLE_ROWS_DATA.map(
+            (
+              {
+                id,
+                name,
+                driverLicense,
+                licensePlate,
+                telephone,
+                address,
+                entryTime,
+                exitTime,
+                visitDate,
+                visitedUnit,
+              },
+              index
+            ) => (
+              <tr key={name} className="even:bg-blue-gray-50/50">
+                <td className="p-4">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-normal"
+                  >
+                    {id}
+                  </Typography>
+                </td>
+                <td className="p-4">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-normal"
+                  >
+                    {name}
+                  </Typography>
+                </td>
+                <td className="p-4">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-normal"
+                  >
+                    {driverLicense}
+                  </Typography>
+                </td>
+                <td className="p-4">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-normal"
+                  >
+                    {licensePlate}
+                  </Typography>
+                </td>
+                <td className="p-4">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-normal"
+                  >
+                    {telephone}
+                  </Typography>
+                </td>
+                <td className="p-4">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-normal"
+                  >
+                    {address}
+                  </Typography>
+                </td>
+                <td className="p-4">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-normal"
+                  >
+                    {entryTime}
+                  </Typography>
+                </td>
+                <td className="p-4">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-normal"
+                  >
+                    {exitTime}
+                  </Typography>
+                </td>
+                <td className="p-4">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-normal"
+                  >
+                    {visitDate}
+                  </Typography>
+                </td>
+                <td className="p-4">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-normal"
+                  >
+                    {visitedUnit}
+                  </Typography>
+                </td>
+                <td className="p-4">
+                  <Typography
+                    as="a"
+                    href="#"
+                    variant="small"
+                    color="blue"
+                    className="font-medium"
+                  >
+                    Edit
+                  </Typography>
+                </td>
+              </tr>
+            )
+          )}
         </tbody>
       </table>
     </Card>
