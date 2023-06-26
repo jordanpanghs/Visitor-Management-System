@@ -6,13 +6,9 @@ import Home from "./Components/Home.js";
 function App() {
   return (
     <>
-      <div className="App">
-        <Header />
-      </div>
+      <Header />
 
-      <div className="home">
-        <Home />
-      </div>
+      <Home />
     </>
   );
 }
