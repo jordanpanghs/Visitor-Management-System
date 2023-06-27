@@ -5,7 +5,7 @@ import { Card, Typography } from "@material-tailwind/react";
 
 function Home() {
   return (
-    <div className="flex flex-col justify-start min-h-screen px-20 py-10">
+    <div className="flex flex-col justify-start max-h-screen px-20 py-10">
       <Table />
     </div>
   );
