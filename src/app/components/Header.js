@@ -2,9 +2,13 @@
 
 import React from "react";
 import { Menu, Transition } from "@headlessui/react";
+import { useAuth } from "../context/AuthContext";
 
 function Header() {
   const navItems = NavItems();
+  const { logout } = useAuth();
+  const { login, signup, currentUser } = useAuth();
+  console.log(currentUser);
 
   return (
     <header className="bg-white min-w-screen-sm p-5 sticky top-0 z-40 leading-6 px-20 text-xl font-[Roboto] border-b border-slate-900/10">
@@ -94,12 +98,13 @@ function UserDropDown() {
           <Menu.Item>
             {({ active }) => (
               <button
+                onClick={() => logout()}
                 className={`${
                   active ? "bg-blue-400 text-white" : "text-gray-900"
                 } group flex w-full justify-center rounded-md px-2 py-2 text-sm`}
               >
                 <a className="" href="#">
-                  Account settings
+                  Logout
                 </a>
               </button>
             )}

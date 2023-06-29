@@ -127,7 +127,7 @@ function Table() {
               },
               index
             ) => (
-              <tr key={name} className="even:bg-blue-gray-50/50">
+              <tr key={id} className="even:bg-blue-gray-50/50">
                 <td className="p-4">
                   <Typography
                     variant="small"
