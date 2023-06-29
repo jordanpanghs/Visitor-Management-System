@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Menu, Transition } from "../dashboard/styles";
+import { Menu, Transition } from "@headlessui/react";
 
 function Header() {
   const navItems = NavItems();
