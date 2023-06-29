@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Menu, Transition } from "../styles";
+import { Menu, Transition } from "../dashboard/styles";
 
 function Header() {
   const navItems = NavItems();
