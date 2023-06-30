@@ -27,7 +27,7 @@ export default function Login() {
   }
 
   return (
-    <div className="flex-1 text-xs sm:text-sm flex flex-col justify-center items-center gap-2 sm:gap-4">
+    <div className="min-h-screen flex-1 text-xs sm:text-sm flex flex-col justify-center items-center gap-2 sm:gap-4">
       <h1 className="font-extrabold select-none text-2xl sm:text-4xl uppercase">
         {isLoggingIn ? "Login" : "register"}
       </h1>

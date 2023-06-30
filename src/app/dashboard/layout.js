@@ -8,10 +8,7 @@ export default function DashboardLayout({
 }) {
   return (
     <section>
-      <AuthProvider>
-        <Header />
-        {children}
-      </AuthProvider>
+      <AuthProvider>{children}</AuthProvider>
     </section>
   );
 }
