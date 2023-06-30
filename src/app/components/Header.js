@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthContext";
 
 function Header() {
   const navItems = NavItems();
-  const { logout } = useAuth();
+
   const { login, signup, currentUser } = useAuth();
   console.log(currentUser);
 
@@ -52,6 +52,8 @@ function NavItems() {
 }
 
 function UserDropDown() {
+  const { logout } = useAuth();
+
   return (
     <Menu>
       <Menu.Button>
