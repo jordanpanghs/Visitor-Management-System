@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -11,6 +12,10 @@ export default function Login() {
   console.log(currentUser);
 
   async function submitHandler() {
+    if (!isLoggingIn && !name) {
+      setError("Please enter your name");
+      return;
+    }
     if (!email || !password) {
       setError("Please enter email and password");
       return;
@@ -23,7 +28,7 @@ export default function Login() {
       }
       return;
     }
-    await signup(email, password);
+    await signup(name, email, password);
   }
 
   return (
@@ -35,6 +40,15 @@ export default function Login() {
         <div className="w-full max-w-[40ch] border-rose-400 border text-center border-solid text-rose-400 py-2">
           {error}
         </div>
+      )}
+      {!isLoggingIn && (
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Full Name"
+          className="outline-none duration-300 border-b-2 border-solid border-white focus:border-cyan-300 text-slate-900 p-2 w-full max-w-[40ch]"
+        />
       )}
       <input
         type="text"

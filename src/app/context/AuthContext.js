@@ -3,6 +3,7 @@ import { auth, db } from "firebase.js";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  updateProfile,
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
@@ -18,9 +19,24 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  function signup(email, password) {
-    createUserWithEmailAndPassword(auth, email, password);
-    return;
+  function signup(name, email, password) {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        updateProfile(user, {
+          displayName: name,
+        })
+          .then(() => {
+            console.log("Display name updated successfully!");
+            // You can perform additional actions here after the display name has been updated.
+          })
+          .catch((error) => {
+            console.log("Error updating display name:", error);
+          });
+      })
+      .catch((error) => {
+        console.log("Error creating user:", error);
+      });
   }
 
   function login(email, password) {
