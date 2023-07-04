@@ -8,6 +8,7 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
+import { useRouter } from "next/navigation";
 
 const AuthContext = React.createContext();
 
@@ -18,6 +19,7 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   //Creates user and updates their display name
   function signup(name, email, password) {
@@ -38,7 +40,8 @@ export function AuthProvider({ children }) {
   }
 
   function logout() {
-    return signOut(auth);
+    signOut(auth);
+    return router.push("/login");
   }
 
   useEffect(() => {
