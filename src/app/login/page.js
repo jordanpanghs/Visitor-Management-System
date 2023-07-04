@@ -16,11 +16,5 @@ export default function LoginPage() {
     }
   });
 
-  // if (!currentUser) {
-  //   return <Login />;
-  // } else if (currentUser) {
-  //   return <Login />;
-  // }
-
   return <>{!currentUser && <Login />}</>;
 }
