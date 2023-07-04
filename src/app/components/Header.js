@@ -52,7 +52,15 @@ function NavItems() {
 }
 
 function UserDropDown() {
-  const { logout } = useAuth();
+  const { logout, currentUser } = useAuth();
+
+  const names = () => {
+    if (currentUser && currentUser.displayName) {
+      const nameArr = currentUser.displayName.split(" ");
+      return nameArr[0];
+    }
+    return "";
+  };
 
   return (
     <Menu>
@@ -71,6 +79,13 @@ function UserDropDown() {
           className="absolute right-0 mt-11 w-40 origin-top-right rounded-md bg-white shadow-lg 
       ring-1 ring-black ring-opacity-10 focus:outline-none px-1 py-1"
         >
+          <Menu.Item>
+            {({ active }) => (
+              <div className="group flex w-full justify-center rounded-md px-2 py-2 text-sm">
+                Hello, {names()}
+              </div>
+            )}
+          </Menu.Item>
           <Menu.Item>
             {({ active }) => (
               <button

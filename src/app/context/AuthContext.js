@@ -19,20 +19,14 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  //Creates user and updates their display name
   function signup(name, email, password) {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
         updateProfile(user, {
           displayName: name,
-        })
-          .then(() => {
-            console.log("Display name updated successfully!");
-            // You can perform additional actions here after the display name has been updated.
-          })
-          .catch((error) => {
-            console.log("Error updating display name:", error);
-          });
+        });
       })
       .catch((error) => {
         console.log("Error creating user:", error);
