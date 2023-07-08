@@ -10,8 +10,8 @@ export default function LoginAuthentication() {
 
   useEffect(() => {
     // if there is no authenticated user, redirect to login page
-    if (!currentUser) {
+    if (currentUser == null) {
       router.push("/login");
     }
-  }, []);
+  }, [currentUser]);
 }

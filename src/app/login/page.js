@@ -12,6 +12,8 @@ export default function LoginPage() {
   useEffect(() => {
     // if there is no authenticated user, redirect to login page
     if (currentUser) {
+      router.back();
+    } else if (currentUser && typeof window !== "undefined") {
       router.push("/dashboard");
     }
   });

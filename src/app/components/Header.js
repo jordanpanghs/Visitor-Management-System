@@ -3,6 +3,7 @@
 import React from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { useAuth } from "../context/AuthContext";
+import Link from "next/link";
 
 function Header() {
   const navItems = NavItems();
@@ -20,12 +21,12 @@ function Header() {
           <ul className="hidden lg:flex space-x-8 mr-8">
             {navItems.map((item) => (
               <li key={item.id}>
-                <a
+                <Link
                   href={item.link}
                   className="hover:text-blue-500 duration-500"
                 >
                   {item.text}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
@@ -44,10 +45,14 @@ function NavItems() {
   //Navigation Link Items
   return [
     { id: 1, text: "Create User", link: "#" },
-    { id: 2, text: "Register Special Visitor", link: "#" },
+    {
+      id: 2,
+      text: "Register Special Visitor",
+      link: "/register/specialvisitor",
+    },
     { id: 3, text: "Visitations", link: "#" },
     { id: 4, text: "Parcels", link: "#" },
-    { id: 5, text: "Registered Visitors", link: "#" },
+    { id: 5, text: "Registered Visitors", link: "" },
   ];
 }
 
