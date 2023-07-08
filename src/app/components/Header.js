@@ -15,7 +15,9 @@ function Header() {
     <header className="bg-white min-w-screen-sm p-5 sticky top-0 z-40 leading-6 px-20 text-xl font-[Roboto] border-b border-slate-900/10">
       <nav className="flex-row flex relative items-center ml-auto justify-between">
         <div className="inline text-left cursor-pointer text-lg">
-          <span>Visitor Management System </span>
+          <Link href="/dashboard">
+            <span>Visitor Management System </span>
+          </Link>
         </div>
         <div className="flex flex-row text-base items-center">
           <ul className="hidden lg:flex space-x-8 mr-8">
