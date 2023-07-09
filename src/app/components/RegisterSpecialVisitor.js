@@ -2,20 +2,37 @@
 
 import moment from "moment";
 import React from "react";
-
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 
+import { auth, db } from "firebase.js";
+import { collection, addDoc } from "firebase/firestore";
+
 export default function RegisterSpecialVisitor() {
+  const [visitorName, setVisitorName] = useState("");
+  const [visitorIC, setVisitorIC] = useState("");
+  const [visitorCarPlate, setVisitorCarPlate] = useState("");
+  const [visitorTelNo, setVisitorTelNo] = useState("");
+  const [visitorVisitDateTime, setVisitorVisitDateTime] = useState("");
+  const [visitorVisitPurpose, setVisitorVisitPurpose] = useState("");
+
+  //To prevent past dates from being picked
   var yesterday = moment().subtract(1, "day");
   function valid(current) {
     return current.isAfter(yesterday);
   }
 
   let inputProps = {
+    id: "visitDateTime",
+    name: "visitDateTime",
     className:
       "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6",
   };
+
+  function addVisitor() {
+    const dbInstance = collection(db, "registeredVisitors");
+    addDoc(dbInstance, {});
+  }
 
   return (
     <>
@@ -32,7 +49,7 @@ export default function RegisterSpecialVisitor() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <form className="space-y-6">
             <div className="flex items-center justify-between space-x-10">
               <div>
                 <label
@@ -125,10 +142,6 @@ export default function RegisterSpecialVisitor() {
                   <Datetime
                     inputProps={inputProps}
                     isValidDate={valid}
-                    id="visitDateTime"
-                    name="visitDateTime"
-                    type="time"
-                    autoComplete="off"
                     required
                   />
                 </div>
@@ -159,7 +172,7 @@ export default function RegisterSpecialVisitor() {
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Sign in
+                Register Visitor
               </button>
             </div>
           </form>
