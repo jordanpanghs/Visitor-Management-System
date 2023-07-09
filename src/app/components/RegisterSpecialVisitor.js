@@ -38,19 +38,15 @@ export default function RegisterSpecialVisitor() {
       visitorTelNo: visitorTelNo,
       visitorVisitDateTime: visitorVisitDateTime,
       visitorVisitPurpose: visitorVisitPurpose,
+    }).then(() => {
+      setVisitorName("");
+      setVisitorIC("");
+      setVisitorCarPlate("");
+      setVisitorTelNo("");
+      setVisitorVisitDateTime("");
+      setVisitorVisitPurpose("");
     });
   }
-
-  // function handleSubmit() {
-  //   console.log(
-  //     visitorName,
-  //     visitorIC,
-  //     visitorCarPlate,
-  //     visitorTelNo,
-  //     visitorVisitDateTime,
-  //     visitorVisitPurpose
-  //   );
-  // }
 
   return (
     <>
