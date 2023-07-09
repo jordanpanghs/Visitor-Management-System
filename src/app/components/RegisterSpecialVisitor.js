@@ -1,7 +1,7 @@
 "use client";
 
 import moment from "moment";
-import React from "react";
+import { React, useState } from "react";
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 
@@ -29,10 +29,28 @@ export default function RegisterSpecialVisitor() {
       "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6",
   };
 
-  function addVisitor() {
+  async function addVisitor() {
     const dbInstance = collection(db, "registeredVisitors");
-    addDoc(dbInstance, {});
+    await addDoc(dbInstance, {
+      visitorName: visitorName,
+      visitorIC: visitorIC,
+      visitorCarPlate: visitorCarPlate,
+      visitorTelNo: visitorTelNo,
+      visitorVisitDateTime: visitorVisitDateTime,
+      visitorVisitPurpose: visitorVisitPurpose,
+    });
   }
+
+  // function handleSubmit() {
+  //   console.log(
+  //     visitorName,
+  //     visitorIC,
+  //     visitorCarPlate,
+  //     visitorTelNo,
+  //     visitorVisitDateTime,
+  //     visitorVisitPurpose
+  //   );
+  // }
 
   return (
     <>
@@ -47,9 +65,9 @@ export default function RegisterSpecialVisitor() {
             Register Special Visitor
           </h2>
         </div>
-
+        {console.log(collection(db, "registeredVisitors"))}
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6">
+          <form className="space-y-6" action="#">
             <div className="flex items-center justify-between space-x-10">
               <div>
                 <label
@@ -65,6 +83,7 @@ export default function RegisterSpecialVisitor() {
                     type="text"
                     autoComplete="text"
                     required
+                    onChange={(e) => setVisitorName(e.target.value)}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -84,6 +103,7 @@ export default function RegisterSpecialVisitor() {
                     type="text"
                     autoComplete="text"
                     required
+                    onChange={(e) => setVisitorIC(e.target.value)}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -105,6 +125,7 @@ export default function RegisterSpecialVisitor() {
                     type="text"
                     autoComplete="text"
                     required
+                    onChange={(e) => setVisitorCarPlate(e.target.value)}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -124,6 +145,7 @@ export default function RegisterSpecialVisitor() {
                     type="text"
                     autoComplete="tel"
                     required
+                    onChange={(e) => setVisitorTelNo(e.target.value)}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -140,6 +162,7 @@ export default function RegisterSpecialVisitor() {
                 </label>
                 <div className="mt-2">
                   <Datetime
+                    onChange={(e) => setVisitorVisitDateTime(e.toJSON())}
                     inputProps={inputProps}
                     isValidDate={valid}
                     required
@@ -161,6 +184,7 @@ export default function RegisterSpecialVisitor() {
                     type="text"
                     autoComplete="off"
                     required
+                    onChange={(e) => setVisitorVisitPurpose(e.target.value)}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -169,7 +193,8 @@ export default function RegisterSpecialVisitor() {
 
             <div>
               <button
-                type="submit"
+                // type="submit"
+                onClick={addVisitor}
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Register Visitor
