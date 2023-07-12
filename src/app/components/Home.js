@@ -6,6 +6,11 @@ import { Card, Typography } from "@material-tailwind/react";
 function Home() {
   return (
     <div className="flex flex-col justify-start max-h-screen px-20 py-10">
+      <div>
+        <h1 className="text-left mb-8 pl-5 text-2xl font-medium">
+          Registered Visitors
+        </h1>
+      </div>
       <Table />
     </div>
   );
