@@ -4,6 +4,7 @@ import moment from "moment";
 import { React, useState } from "react";
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
+import { useRouter } from "next/navigation";
 
 import { auth, db } from "firebase.js";
 import { collection, addDoc } from "firebase/firestore";
@@ -15,6 +16,7 @@ export default function RegisterSpecialVisitor() {
   const [visitorTelNo, setVisitorTelNo] = useState("");
   const [visitorVisitDateTime, setVisitorVisitDateTime] = useState("");
   const [visitorVisitPurpose, setVisitorVisitPurpose] = useState("");
+  const router = useRouter();
 
   //To prevent past dates from being picked
   var yesterday = moment().subtract(1, "day");
@@ -25,13 +27,14 @@ export default function RegisterSpecialVisitor() {
   let inputProps = {
     id: "visitDateTime",
     name: "visitDateTime",
+    value: `${visitorVisitDateTime}`,
     className:
       "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6",
   };
 
-  async function addVisitor() {
+  function addVisitor() {
     const dbInstance = collection(db, "registeredVisitors");
-    await addDoc(dbInstance, {
+    addDoc(dbInstance, {
       visitorName: visitorName,
       visitorIC: visitorIC,
       visitorCarPlate: visitorCarPlate,
@@ -45,6 +48,9 @@ export default function RegisterSpecialVisitor() {
       setVisitorTelNo("");
       setVisitorVisitDateTime("");
       setVisitorVisitPurpose("");
+
+      alert("Added successfully");
+      // router.push("/");
     });
   }
 
@@ -63,7 +69,7 @@ export default function RegisterSpecialVisitor() {
         </div>
         {console.log(collection(db, "registeredVisitors"))}
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#">
+          <div className="space-y-6">
             <div className="flex items-center justify-between space-x-10">
               <div>
                 <label
@@ -80,6 +86,7 @@ export default function RegisterSpecialVisitor() {
                     autoComplete="text"
                     required
                     onChange={(e) => setVisitorName(e.target.value)}
+                    value={visitorName}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -100,6 +107,7 @@ export default function RegisterSpecialVisitor() {
                     autoComplete="text"
                     required
                     onChange={(e) => setVisitorIC(e.target.value)}
+                    value={visitorIC}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -122,6 +130,7 @@ export default function RegisterSpecialVisitor() {
                     autoComplete="text"
                     required
                     onChange={(e) => setVisitorCarPlate(e.target.value)}
+                    value={visitorCarPlate}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -142,6 +151,7 @@ export default function RegisterSpecialVisitor() {
                     autoComplete="tel"
                     required
                     onChange={(e) => setVisitorTelNo(e.target.value)}
+                    value={visitorTelNo}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -181,6 +191,7 @@ export default function RegisterSpecialVisitor() {
                     autoComplete="off"
                     required
                     onChange={(e) => setVisitorVisitPurpose(e.target.value)}
+                    value={visitorVisitPurpose}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -196,7 +207,7 @@ export default function RegisterSpecialVisitor() {
                 Register Visitor
               </button>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </>
