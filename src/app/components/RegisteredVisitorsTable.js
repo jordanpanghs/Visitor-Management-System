@@ -61,6 +61,7 @@ function Table() {
 
   //write each document retrieved in registeredVisitorsData into each row in the table
   const TABLE_ROWS_DATA = registeredVisitorsData.map((doc) => {
+    //Convert date object into formatted date string
     const dateString = doc.visitorVisitDateTime;
     const format = "YYYY-MM-DDTHH:mm:ss.SSSZ";
     const date = moment(dateString, format);
