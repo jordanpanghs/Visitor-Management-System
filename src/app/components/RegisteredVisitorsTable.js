@@ -21,12 +21,6 @@ function Table() {
   const [registeredVisitorsData, setRegisteredVisitorsData] = useState([]);
   const [numOfRegisteredVisitors, setNumOfRegisteredVisitors] = useState("");
 
-  const dateString = registeredVisitorsData.visitorVisitDateTime;
-  const format = "YYYY-MM-DDTHH:mm:ss.SSSZ";
-  const date = moment(dateString, format);
-
-  const formattedDate = date.format("MM/DD/YYYY h:mm A");
-
   //Retrieve all documents from collection registeredVisitors
   useEffect(() => {
     fetchRegisteredVisitorsData();
@@ -67,13 +61,19 @@ function Table() {
 
   //write each document retrieved in registeredVisitorsData into each row in the table
   const TABLE_ROWS_DATA = registeredVisitorsData.map((doc) => {
+    const dateString = doc.visitorVisitDateTime;
+    const format = "YYYY-MM-DDTHH:mm:ss.SSSZ";
+    const date = moment(dateString, format);
+
+    const formattedDate = date.format("MM/DD/YYYY h:mm A");
+
     return {
       id: doc.id,
       name: doc.visitorName,
       identityCardNum: doc.visitorIC,
       licensePlateNum: doc.visitorCarPlate,
       telephoneNum: doc.visitorTelNo,
-      visitDateTime: doc.visitorVisitDateTime,
+      visitDateTime: formattedDate,
       visitedUnit: doc.visitorVisitedUnit ? doc.visitorVisitedUnit : "-",
       visitingPurpose: doc.visitorVisitPurpose,
     };
