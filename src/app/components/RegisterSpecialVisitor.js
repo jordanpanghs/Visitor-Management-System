@@ -68,7 +68,7 @@ export default function RegisterSpecialVisitor() {
             Register Special Visitor
           </h2>
         </div>
-        {console.log(collection(db, "registeredVisitors"))}
+
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <div className="space-y-6">
             <div className="flex items-center justify-between space-x-10">

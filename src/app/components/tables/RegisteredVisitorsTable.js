@@ -38,8 +38,6 @@ function Table() {
     });
   }
 
-  console.log(registeredVisitorsData); // This will log the updated array
-
   const TABLE_HEAD = [
     "Document ID.",
     "Name",
