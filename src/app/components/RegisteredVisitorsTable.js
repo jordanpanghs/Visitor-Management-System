@@ -10,18 +10,26 @@ import {
   getCountFromServer,
 } from "firebase/firestore";
 import { auth, db } from "firebase.js";
+import Datetime from "react-datetime";
+import moment from "moment";
 
 export default function RegisteredVisitorsTable() {
   return <Table />;
 }
 
 function Table() {
-  const [registeredVisitorsData, setRegisteredVisitorsData] = useState("");
+  const [registeredVisitorsData, setRegisteredVisitorsData] = useState([]);
   const [numOfRegisteredVisitors, setNumOfRegisteredVisitors] = useState("");
+
+  const dateString = registeredVisitorsData.visitorVisitDateTime;
+  const format = "YYYY-MM-DDTHH:mm:ss.SSSZ";
+  const date = moment(dateString, format);
+
+  const formattedDate = date.format("MM/DD/YYYY h:mm A");
 
   //Retrieve all documents from collection registeredVisitors
   useEffect(() => {
-    fetchRegisteredVisitorsData;
+    fetchRegisteredVisitorsData();
   }, []);
 
   function fetchRegisteredVisitorsData() {
@@ -32,15 +40,21 @@ function Table() {
       //store the number of documents in the collection into a variable
       setNumOfRegisteredVisitors(querySnapshot.size);
 
-      querySnapshot.forEach((doc) => {
-        //store the data of each document into a variable
-        setRegisteredVisitorsData(doc.data());
+      setRegisteredVisitorsData((prevArray) => {
+        // Update the state by adding the new data to the previous array
+        const newData = [];
+        querySnapshot.forEach((doc) => {
+          newData.push({ id: doc.id, ...doc.data() }); // Include doc.id in the data object
+        });
+        return [...prevArray, ...newData];
       });
     });
   }
 
+  console.log(registeredVisitorsData); // This will log the updated array
+
   const TABLE_HEAD = [
-    "Record No.",
+    "Document ID.",
     "Name",
     "Identity Card Number",
     "License Plate Number",
@@ -51,145 +65,154 @@ function Table() {
     "",
   ];
 
-  const TABLE_ROWS_DATA = [
-    {
-      id: 1,
-      name: "John Doe",
-      identityCardNum: "123456789",
-      licensePlateNum: "ABC123",
-      telephoneNum: "1234567890",
-      visitDateTime: "2021-10-10 10:00",
-      visitedUnit: "B-123",
-      visitingPurpose: "Delivery",
-    },
-  ];
+  //write each document retrieved in registeredVisitorsData into each row in the table
+  const TABLE_ROWS_DATA = registeredVisitorsData.map((doc) => {
+    return {
+      id: doc.id,
+      name: doc.visitorName,
+      identityCardNum: doc.visitorIC,
+      licensePlateNum: doc.visitorCarPlate,
+      telephoneNum: doc.visitorTelNo,
+      visitDateTime: doc.visitorVisitDateTime,
+      visitedUnit: doc.visitorVisitedUnit ? doc.visitorVisitedUnit : "-",
+      visitingPurpose: doc.visitorVisitPurpose,
+    };
+  });
 
   return (
-    <Card className="overflow-scroll h-full w-full">
-      <table className="w-full min-w-max table-auto text-left">
-        <thead>
-          <tr>
-            {TABLE_HEAD.map((head) => (
-              <th
-                key={head}
-                className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
-              >
-                <Typography
-                  variant="small"
-                  color="blue-gray"
-                  className="font-normal leading-none opacity-70"
-                >
-                  {head}
-                </Typography>
-              </th>
-            ))}
-          </tr>
-        </thead>
+    <>
+      <div>
+        <h1 className="text-left mb-8 pl-5 text-2xl font-medium">
+          Registered Visitors
+        </h1>
+      </div>
 
-        <tbody>
-          {TABLE_ROWS_DATA.map(
-            (
-              {
-                id,
-                name,
-                identityCardNum,
-                licensePlateNum,
-                telephoneNum,
-                visitDateTime,
-                visitedUnit,
-                visitingPurpose,
-              },
-              index
-            ) => (
-              <tr key={id} className="even:bg-blue-gray-50/50">
-                <td className="p-4">
+      <Card className="overflow-scroll h-full w-full">
+        <table className="w-full min-w-max table-auto text-left">
+          <thead>
+            <tr>
+              {TABLE_HEAD.map((head) => (
+                <th
+                  key={head}
+                  className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
+                >
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal"
+                    className="font-normal leading-none opacity-70"
                   >
-                    {id}
+                    {head}
                   </Typography>
-                </td>
-                <td className="p-4">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {name}
-                  </Typography>
-                </td>
-                <td className="p-4">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {identityCardNum}
-                  </Typography>
-                </td>
-                <td className="p-4">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {licensePlateNum}
-                  </Typography>
-                </td>
-                <td className="p-4">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {telephoneNum}
-                  </Typography>
-                </td>
-                <td className="p-4">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {visitDateTime}
-                  </Typography>
-                </td>
-                <td className="p-4">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {visitedUnit}
-                  </Typography>
-                </td>
-                <td className="p-4">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {visitingPurpose}
-                  </Typography>
-                </td>
-                <td className="p-4">
-                  <Typography
-                    as="a"
-                    href="#"
-                    variant="small"
-                    color="blue"
-                    className="font-medium"
-                  >
-                    Edit
-                  </Typography>
-                </td>
-              </tr>
-            )
-          )}
-        </tbody>
-      </table>
-    </Card>
+                </th>
+              ))}
+            </tr>
+          </thead>
+
+          <tbody>
+            {TABLE_ROWS_DATA.map(
+              (
+                {
+                  id,
+                  name,
+                  identityCardNum,
+                  licensePlateNum,
+                  telephoneNum,
+                  visitDateTime,
+                  visitedUnit,
+                  visitingPurpose,
+                },
+                index
+              ) => (
+                <tr key={id} className="even:bg-blue-gray-50/50">
+                  <td className="p-4">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                    >
+                      {id}
+                    </Typography>
+                  </td>
+                  <td className="p-4">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                    >
+                      {name}
+                    </Typography>
+                  </td>
+                  <td className="p-4">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                    >
+                      {identityCardNum}
+                    </Typography>
+                  </td>
+                  <td className="p-4">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                    >
+                      {licensePlateNum}
+                    </Typography>
+                  </td>
+                  <td className="p-4">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                    >
+                      {telephoneNum}
+                    </Typography>
+                  </td>
+                  <td className="p-4">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                    >
+                      {visitDateTime}
+                    </Typography>
+                  </td>
+                  <td className="p-4">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                    >
+                      {visitedUnit}
+                    </Typography>
+                  </td>
+                  <td className="p-4">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                    >
+                      {visitingPurpose}
+                    </Typography>
+                  </td>
+                  <td className="p-4">
+                    <Typography
+                      as="a"
+                      href="#"
+                      variant="small"
+                      color="blue"
+                      className="font-medium"
+                    >
+                      Edit
+                    </Typography>
+                  </td>
+                </tr>
+              )
+            )}
+          </tbody>
+        </table>
+      </Card>
+    </>
   );
 }

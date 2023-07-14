@@ -35,6 +35,7 @@ export default function RegisterSpecialVisitor() {
   function addVisitor() {
     const dbInstance = collection(db, "registeredVisitors");
     addDoc(dbInstance, {
+      //add visitor id according to the number of documents in the collection
       visitorName: visitorName,
       visitorIC: visitorIC,
       visitorCarPlate: visitorCarPlate,
