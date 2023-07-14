@@ -1,86 +1,92 @@
-"use client"; //Temporary, will have to put data into state
+"use client";
 
-import React, { useEffect, useState } from "react";
 import { Card, Typography } from "@material-tailwind/react";
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { auth, db } from "firebase.js";
-import moment from "moment";
 
-export default function RegisteredVisitorsTable() {
-  return <Table />;
-}
-
-function Table() {
-  const [registeredVisitorsData, setRegisteredVisitorsData] = useState([]);
-  const [numOfRegisteredVisitors, setNumOfRegisteredVisitors] = useState("");
-
-  //Retrieve all documents from collection registeredVisitors
-  useEffect(() => {
-    fetchRegisteredVisitorsData();
-  }, []);
-
-  function fetchRegisteredVisitorsData() {
-    const q = query(collection(db, "registeredVisitors"));
-    const querySnapshot = getDocs(q);
-
-    querySnapshot.then((querySnapshot) => {
-      //store the number of documents in the collection into a variable
-      setNumOfRegisteredVisitors(querySnapshot.size);
-
-      setRegisteredVisitorsData((prevArray) => {
-        // Update the state by adding the new data to the previous array
-        const newData = [];
-        querySnapshot.forEach((doc) => {
-          newData.push({ id: doc.id, ...doc.data() }); // Include doc.id in the data object
-        });
-        return [...prevArray, ...newData];
-      });
-    });
-  }
-
-  console.log(registeredVisitorsData); // This will log the updated array
-
+export default function VisitorLogsTable() {
   const TABLE_HEAD = [
-    "Document ID.",
+    "Record No.",
     "Name",
     "Identity Card Number",
     "License Plate Number",
     "Telephone Number",
-    "Visiting Date & Time",
+    "Address",
+    "Entry Time",
+    "Exit Time",
+    "Visit Date",
     "Visited Unit",
-    "Visiting Purpose",
     "",
   ];
 
-  //write each document retrieved in registeredVisitorsData into each row in the table
-  const TABLE_ROWS_DATA = registeredVisitorsData.map((doc) => {
-    //Convert date object into formatted date string
-    const dateString = doc.visitorVisitDateTime;
-    const format = "YYYY-MM-DDTHH:mm:ss.SSSZ";
-    const date = moment(dateString, format);
-
-    const formattedDate = date.format("MM/DD/YYYY h:mm A");
-
-    return {
-      id: doc.id,
-      name: doc.visitorName,
-      identityCardNum: doc.visitorIC,
-      licensePlateNum: doc.visitorCarPlate,
-      telephoneNum: doc.visitorTelNo,
-      visitDateTime: formattedDate,
-      visitedUnit: doc.visitorVisitedUnit ? doc.visitorVisitedUnit : "-",
-      visitingPurpose: doc.visitorVisitPurpose,
-    };
-  });
+  const TABLE_ROWS_DATA = [
+    {
+      id: 1,
+      name: "John Doe",
+      driverLicense: "123456789",
+      licensePlate: "ABC123",
+      telephone: "1234567890",
+      address: "123 Main St",
+      entryTime: "2021-10-10 10:00:00",
+      exitTime: "2021-10-10 10:00:00",
+      visitDate: "2021-10-10",
+      visitedUnit: "B-123",
+    },
+    {
+      id: 2,
+      name: "John Doe",
+      driverLicense: "123456789",
+      licensePlate: "ABC123",
+      telephone: "1234567890",
+      address: "123 Main St",
+      entryTime: "2021-10-10 10:00:00",
+      exitTime: "2021-10-10 10:00:00",
+      visitDate: "2021-10-10",
+      visitedUnit: "B-123",
+    },
+    {
+      id: 3,
+      name: "John Doe",
+      driverLicense: "123456789",
+      licensePlate: "ABC123",
+      telephone: "1234567890",
+      address: "123 Main St",
+      entryTime: "2021-10-10 10:00:00",
+      exitTime: "2021-10-10 10:00:00",
+      visitDate: "2021-10-10",
+      visitedUnit: "B-123",
+    },
+    {
+      id: 4,
+      name: "John Doe",
+      driverLicense: "123456789",
+      licensePlate: "ABC123",
+      telephone: "1234567890",
+      address: "123 Main St",
+      entryTime: "2021-10-10 10:00:00",
+      exitTime: "2021-10-10 10:00:00",
+      visitDate: "2021-10-10",
+      visitedUnit: "B-123",
+    },
+    {
+      id: 5,
+      name: "John Doe",
+      driverLicense: "123456789",
+      licensePlate: "ABC123",
+      telephone: "1234567890",
+      address: "123 Main St",
+      entryTime: "2021-10-10 10:00:00",
+      exitTime: "2021-10-10 10:00:00",
+      visitDate: "2021-10-10",
+      visitedUnit: "B-123",
+    },
+  ];
 
   return (
     <>
       <div>
         <h1 className="text-left mb-8 pl-5 text-2xl font-medium">
-          Registered Visitors
+          Visitor Logs
         </h1>
       </div>
-
       <Card className="overflow-scroll h-full w-full">
         <table className="w-full min-w-max table-auto text-left">
           <thead>
@@ -108,12 +114,14 @@ function Table() {
                 {
                   id,
                   name,
-                  identityCardNum,
-                  licensePlateNum,
-                  telephoneNum,
-                  visitDateTime,
+                  driverLicense,
+                  licensePlate,
+                  telephone,
+                  address,
+                  entryTime,
+                  exitTime,
+                  visitDate,
                   visitedUnit,
-                  visitingPurpose,
                 },
                 index
               ) => (
@@ -142,7 +150,7 @@ function Table() {
                       color="blue-gray"
                       className="font-normal"
                     >
-                      {identityCardNum}
+                      {driverLicense}
                     </Typography>
                   </td>
                   <td className="p-4">
@@ -151,7 +159,7 @@ function Table() {
                       color="blue-gray"
                       className="font-normal"
                     >
-                      {licensePlateNum}
+                      {licensePlate}
                     </Typography>
                   </td>
                   <td className="p-4">
@@ -160,7 +168,7 @@ function Table() {
                       color="blue-gray"
                       className="font-normal"
                     >
-                      {telephoneNum}
+                      {telephone}
                     </Typography>
                   </td>
                   <td className="p-4">
@@ -169,7 +177,34 @@ function Table() {
                       color="blue-gray"
                       className="font-normal"
                     >
-                      {visitDateTime}
+                      {address}
+                    </Typography>
+                  </td>
+                  <td className="p-4">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                    >
+                      {entryTime}
+                    </Typography>
+                  </td>
+                  <td className="p-4">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                    >
+                      {exitTime}
+                    </Typography>
+                  </td>
+                  <td className="p-4">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                    >
+                      {visitDate}
                     </Typography>
                   </td>
                   <td className="p-4">
@@ -179,15 +214,6 @@ function Table() {
                       className="font-normal"
                     >
                       {visitedUnit}
-                    </Typography>
-                  </td>
-                  <td className="p-4">
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal"
-                    >
-                      {visitingPurpose}
                     </Typography>
                   </td>
                   <td className="p-4">
