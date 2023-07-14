@@ -1,7 +1,7 @@
 "use client"; //Temporary, will have to put data into state
 
-import RegisteredVisitorsTable from "./RegisteredVisitorsTable";
-import VisitorLogsTable from "./VisitorLogsTable";
+import RegisteredVisitorsTable from "./tables/RegisteredVisitorsTable";
+import VisitorLogsTable from "./tables/VisitorLogsTable";
 
 export default function Home() {
   return (
