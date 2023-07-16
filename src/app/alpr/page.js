@@ -17,8 +17,7 @@ export default function AlprPage() {
       try {
         const response = await fetch("/api/alpr");
         const data = await response.json();
-        console.log(labels);
-        setLabels(data.labels);
+        setLabels(data.text);
       } catch (error) {
         console.error("ERROR:", error);
       }

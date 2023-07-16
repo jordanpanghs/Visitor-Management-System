@@ -6,12 +6,10 @@ export async function GET() {
     keyFilename: "visitor-management-syste-3f0f7-e8395bfdb89d.json",
   });
 
-  const results = await client.labelDetection(
+  const results = await client.textDetection(
     "https://studymalaysiainfo.com/wp-content/uploads/2016/11/UTAR-University.jpg"
   );
-  const labels = results[0].labelAnnotations;
+  const text = results[0].textAnnotations;
 
-  console.log(labels);
-
-  return NextResponse.json({ labels }, { status: 200 });
+  return NextResponse.json({ text }, { status: 200 });
 }
