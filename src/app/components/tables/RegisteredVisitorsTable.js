@@ -95,13 +95,17 @@ export default function RegisteredVisitorTable() {
         <h1 className="text-left mb-8 pl-5 text-2xl font-medium">
           Registered Visitors
         </h1>
+        <label htmlFor="search" className="flex row items-center space-x-3">
+          <h2 className="text-md pl-3">Search by IC Number: </h2>
+          <input
+            className="rounded-2xl"
+            id="search"
+            type="text"
+            value={search}
+            onChange={handleSearch}
+          />
+        </label>
       </div>
-
-      <label htmlFor="search">
-        Search by IC Number:&nbsp;
-        <input id="search" type="text" value={search} onChange={handleSearch} />
-      </label>
-      <br />
 
       <Card className="overflow-scroll h-full w-full">
         <Table data={data} className="w-full min-w-max table-auto text-left">
