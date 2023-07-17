@@ -20,7 +20,8 @@ import {
 export default function RegisteredVisitorTable() {
   const [registeredVisitorsData, setRegisteredVisitorsData] = useState([]);
   const [numOfRegisteredVisitors, setNumOfRegisteredVisitors] = useState("");
-  const [search, setSearch] = React.useState("");
+  const [search, setSearch] = useState("");
+  const [searchField, setSearchField] = useState("name");
 
   //Retrieve all documents from collection registeredVisitors
   useEffect(() => {
@@ -47,7 +48,7 @@ export default function RegisteredVisitorTable() {
   }
 
   const TABLE_HEAD = [
-    "Document ID.",
+    "Document ID",
     "Name",
     "Identity Card Number",
     "License Plate Number",
@@ -81,12 +82,16 @@ export default function RegisteredVisitorTable() {
 
   const data = {
     nodes: TABLE_ROWS_DATA.filter((item) =>
-      item.identityCardNum.toLowerCase().includes(search.toLowerCase())
+      item[searchField].toLowerCase().includes(search.toLowerCase())
     ),
   };
 
   const handleSearch = (event) => {
     setSearch(event.target.value);
+  };
+
+  const handleSearchFieldChange = (event) => {
+    setSearchField(event.target.value);
   };
 
   return (
@@ -95,16 +100,29 @@ export default function RegisteredVisitorTable() {
         <h1 className="text-left mb-8 pl-5 text-2xl font-medium">
           Registered Visitors
         </h1>
-        <label htmlFor="search" className="flex row items-center space-x-3">
-          <h2 className="text-md pl-3">Search by IC Number: </h2>
-          <input
-            className="rounded-2xl"
-            id="search"
-            type="text"
-            value={search}
-            onChange={handleSearch}
-          />
-        </label>
+        <div className="flex row space-x-5">
+          <label htmlFor="search" className="flex row items-center space-x-3">
+            <h2 className="text-md pl-3">Search by </h2>
+            <select
+              className="rounded-sm text-sm w-auto"
+              id="searchField"
+              value={searchField}
+              onChange={handleSearchFieldChange}
+            >
+              <option value="identityCardNum">ID Number</option>
+              <option value="name">Name</option>
+              <option value="visitDateTime">Date & Time</option>
+            </select>
+            <input
+              className="text-sm rounded-sm"
+              id="search"
+              type="text"
+              size="20"
+              value={search}
+              onChange={handleSearch}
+            />
+          </label>
+        </div>
       </div>
 
       <Card className="overflow-scroll h-full w-full">
