@@ -126,7 +126,11 @@ export default function RegisteredVisitorTable() {
       </div>
 
       <Card className="overflow-scroll h-full w-full">
-        <Table data={data} className="w-full min-w-max table-auto text-left">
+        <Table
+          data={data}
+          className="w-full min-w-max table-auto text-left"
+          style={{ gridTemplateColumns: "repeat(9, auto)" }}
+        >
           {(tableList) => (
             <>
               {" "}
