@@ -46,15 +46,16 @@ function Header() {
 function NavItems() {
   //Navigation Link Items
   return [
-    { id: 1, text: "Create User", link: "#" },
+    { id: 3, text: "Visitations", link: "#" },
+    { id: 5, text: "Registered Visitors", link: "" },
+
+    { id: 4, text: "Parcels", link: "#" },
     {
       id: 2,
       text: "Register Special Visitor",
       link: "/register/specialvisitor",
     },
-    { id: 3, text: "Visitations", link: "#" },
-    { id: 4, text: "Parcels", link: "#" },
-    { id: 5, text: "Registered Visitors", link: "" },
+    { id: 1, text: "Create User", link: "#" },
   ];
 }
 
