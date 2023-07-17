@@ -41,7 +41,6 @@ const ReactTable = () => {
         Search by Task:&nbsp;
         <input id="search" type="text" value={search} onChange={handleSearch} />
       </label>
-      <br />
 
       <Table data={data}>
         {(tableList) => (

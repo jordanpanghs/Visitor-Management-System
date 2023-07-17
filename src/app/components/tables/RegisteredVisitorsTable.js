@@ -1,14 +1,26 @@
 "use client"; //Temporary, will have to put data into state
 
 import React, { useEffect, useState } from "react";
-import { Card, Typography } from "@material-tailwind/react";
+import { Card, Typography, tab } from "@material-tailwind/react";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { auth, db } from "firebase.js";
 import moment from "moment";
 
+import {
+  Table,
+  Header,
+  HeaderRow,
+  Body,
+  Row,
+  HeaderCell,
+  Cell,
+  useCustom,
+} from "@table-library/react-table-library/table";
+
 export default function RegisteredVisitorTable() {
   const [registeredVisitorsData, setRegisteredVisitorsData] = useState([]);
   const [numOfRegisteredVisitors, setNumOfRegisteredVisitors] = useState("");
+  const [search, setSearch] = React.useState("");
 
   //Retrieve all documents from collection registeredVisitors
   useEffect(() => {
@@ -67,6 +79,16 @@ export default function RegisteredVisitorTable() {
     };
   });
 
+  const data = {
+    nodes: TABLE_ROWS_DATA.filter((item) =>
+      item.identityCardNum.toLowerCase().includes(search.toLowerCase())
+    ),
+  };
+
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+  };
+
   return (
     <>
       <div>
@@ -75,131 +97,141 @@ export default function RegisteredVisitorTable() {
         </h1>
       </div>
 
-      <Card className="overflow-scroll h-full w-full">
-        <table className="w-full min-w-max table-auto text-left">
-          <thead>
-            <tr>
-              {TABLE_HEAD.map((head) => (
-                <th
-                  key={head}
-                  className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
-                >
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal leading-none opacity-70"
-                  >
-                    {head}
-                  </Typography>
-                </th>
-              ))}
-            </tr>
-          </thead>
+      <label htmlFor="search">
+        Search by IC Number:&nbsp;
+        <input id="search" type="text" value={search} onChange={handleSearch} />
+      </label>
+      <br />
 
-          <tbody>
-            {TABLE_ROWS_DATA.map(
-              (
-                {
-                  id,
-                  name,
-                  identityCardNum,
-                  licensePlateNum,
-                  telephoneNum,
-                  visitDateTime,
-                  visitedUnit,
-                  visitingPurpose,
-                },
-                index
-              ) => (
-                <tr key={id} className="even:bg-blue-gray-50/50">
-                  <td className="p-4">
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal"
+      <Card className="overflow-scroll h-full w-full">
+        <Table data={data} className="w-full min-w-max table-auto text-left">
+          {(tableList) => (
+            <>
+              {" "}
+              <Header>
+                <HeaderRow>
+                  {TABLE_HEAD.map((head) => (
+                    <HeaderCell
+                      key={head}
+                      className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
                     >
-                      {id}
-                    </Typography>
-                  </td>
-                  <td className="p-4">
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal"
-                    >
-                      {name}
-                    </Typography>
-                  </td>
-                  <td className="p-4">
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal"
-                    >
-                      {identityCardNum}
-                    </Typography>
-                  </td>
-                  <td className="p-4">
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal"
-                    >
-                      {licensePlateNum}
-                    </Typography>
-                  </td>
-                  <td className="p-4">
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal"
-                    >
-                      {telephoneNum}
-                    </Typography>
-                  </td>
-                  <td className="p-4">
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal"
-                    >
-                      {visitDateTime}
-                    </Typography>
-                  </td>
-                  <td className="p-4">
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal"
-                    >
-                      {visitedUnit}
-                    </Typography>
-                  </td>
-                  <td className="p-4">
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal"
-                    >
-                      {visitingPurpose}
-                    </Typography>
-                  </td>
-                  <td className="p-4">
-                    <Typography
-                      as="a"
-                      href="#"
-                      variant="small"
-                      color="blue"
-                      className="font-medium"
-                    >
-                      Edit
-                    </Typography>
-                  </td>
-                </tr>
-              )
-            )}
-          </tbody>
-        </table>
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal leading-none opacity-70"
+                      >
+                        {head}
+                      </Typography>
+                    </HeaderCell>
+                  ))}
+                </HeaderRow>
+              </Header>
+              <Body>
+                {tableList.map(
+                  (
+                    {
+                      id,
+                      name,
+                      identityCardNum,
+                      licensePlateNum,
+                      telephoneNum,
+                      visitDateTime,
+                      visitedUnit,
+                      visitingPurpose,
+                    },
+                    index
+                  ) => (
+                    <Row key={id} className="even:bg-blue-gray-50/50">
+                      <Cell className="p-4">
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {id}
+                        </Typography>
+                      </Cell>
+                      <Cell className="p-4">
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {name}
+                        </Typography>
+                      </Cell>
+                      <Cell className="p-4">
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {identityCardNum}
+                        </Typography>
+                      </Cell>
+                      <Cell className="p-4">
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {licensePlateNum}
+                        </Typography>
+                      </Cell>
+                      <Cell className="p-4">
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {telephoneNum}
+                        </Typography>
+                      </Cell>
+                      <Cell className="p-4">
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {visitDateTime}
+                        </Typography>
+                      </Cell>
+                      <Cell className="p-4">
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {visitedUnit}
+                        </Typography>
+                      </Cell>
+                      <Cell className="p-4">
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {visitingPurpose}
+                        </Typography>
+                      </Cell>
+                      <Cell className="p-4">
+                        <Typography
+                          as="a"
+                          href="#"
+                          variant="small"
+                          color="blue"
+                          className="font-medium"
+                        >
+                          Edit
+                        </Typography>
+                      </Cell>
+                    </Row>
+                  )
+                )}
+              </Body>
+            </>
+          )}
+        </Table>
       </Card>
     </>
   );
