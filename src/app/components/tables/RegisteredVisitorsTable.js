@@ -6,11 +6,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { auth, db } from "firebase.js";
 import moment from "moment";
 
-export default function RegisteredVisitorsTable() {
-  return <Table />;
-}
-
-function Table() {
+export default function RegisteredVisitorTable() {
   const [registeredVisitorsData, setRegisteredVisitorsData] = useState([]);
   const [numOfRegisteredVisitors, setNumOfRegisteredVisitors] = useState("");
 
