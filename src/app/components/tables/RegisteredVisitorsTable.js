@@ -138,9 +138,13 @@ export default function RegisteredVisitorTable() {
   };
 
   const handleDelete = (document) => {
-    const docRef = doc(db, "registeredVisitors", document.id);
-    deleteDoc(docRef);
-    alert("Visitor details deleted successfully!");
+    const result = window.confirm("Do you want to delete this entry?");
+    if (result) {
+      const docRef = doc(db, "registeredVisitors", document.id);
+      deleteDoc(docRef);
+      alert("Visitor details deleted successfully!");
+    } else {
+    }
   };
 
   var yesterday = moment().subtract(1, "day");
@@ -157,7 +161,7 @@ export default function RegisteredVisitorTable() {
 
   return (
     <>
-      <div className="space-y-10 pt-10">
+      <div className="space-y-10 py-12">
         <div>
           <h1 className="text-left mb-8 pl-5 text-2xl font-medium">
             Registered Visitors
