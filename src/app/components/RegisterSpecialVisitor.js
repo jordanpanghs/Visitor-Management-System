@@ -2,8 +2,10 @@
 
 import moment from "moment";
 import { React, useState } from "react";
+
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
+
 import { useRouter } from "next/navigation";
 
 import { auth, db } from "firebase.js";
@@ -27,7 +29,11 @@ export default function RegisterSpecialVisitor() {
   let inputProps = {
     id: "visitDateTime",
     name: "visitDateTime",
-    value: `${visitorVisitDateTime}`,
+    // value: `${
+    //   visitorVisitDateTime
+    //     ? moment(visitorVisitDateTime).format("YYYY-MM-DD HH:mm:ss")
+    //     : ""
+    // }`,
     className:
       "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6",
   };
@@ -65,7 +71,7 @@ export default function RegisterSpecialVisitor() {
             alt="Your Company"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Register Special Visitor
+            Register Visitor
           </h2>
         </div>
 
@@ -169,7 +175,12 @@ export default function RegisterSpecialVisitor() {
                 </label>
                 <div className="mt-2">
                   <Datetime
-                    onChange={(e) => setVisitorVisitDateTime(e.toJSON())}
+                    onChange={(momentObj) => {
+                      const selectedDateTime = momentObj
+                        ? momentObj.toJSON()
+                        : null;
+                      setVisitorVisitDateTime(selectedDateTime);
+                    }}
                     inputProps={inputProps}
                     isValidDate={valid}
                     required
