@@ -7,7 +7,10 @@ import {
   query,
   where,
   getDocs,
+  doc,
   onSnapshot,
+  updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { auth, db } from "firebase.js";
 import moment from "moment";
@@ -23,9 +26,8 @@ import {
   useCustom,
 } from "@table-library/react-table-library/table";
 
-function EditModal() {
-  return <></>;
-}
+import Datetime from "react-datetime";
+import "react-datetime/css/react-datetime.css";
 
 export default function RegisteredVisitorTable() {
   const [registeredVisitorsData, setRegisteredVisitorsData] = useState([]);
@@ -35,8 +37,8 @@ export default function RegisteredVisitorTable() {
   const [search, setSearch] = useState("");
   const [searchField, setSearchField] = useState("name");
 
-  const [showModal, setShowModal] = React.useState(false);
-  const [selectedDocument, setSelectedDocument] = useState(null);
+  const [showEditModal, setShowEditModal] = React.useState(false);
+  const [selectedDocument, setSelectedDocument] = useState("");
 
   //Retrieve all documents from collection registeredVisitors
   useEffect(() => {
@@ -46,25 +48,7 @@ export default function RegisteredVisitorTable() {
     }
   }, [isDataFetched]);
 
-  // function fetchRegisteredVisitorsData() {
-  //   const q = query(collection(db, "registeredVisitors"));
-  //   const querySnapshot = getDocs(q);
-
-  //   querySnapshot.then((querySnapshot) => {
-  //     //store the number of documents in the collection into a variable
-  //     setNumOfRegisteredVisitors(querySnapshot.size);
-
-  //     setRegisteredVisitorsData((prevArray) => {
-  //       // Update the state by adding the new data to the previous array
-  //       const newData = [];
-  //       querySnapshot.forEach((doc) => {
-  //         newData.push({ id: doc.id, ...doc.data() }); // Include doc.id in the data object
-  //       });
-  //       return [...prevArray, ...newData];
-  //     });
-  //   });
-  // }
-
+  //Listens to the registeredVisitor collection and updates itself when there are changes
   function listenForRegisteredVisitorsData() {
     const q = query(collection(db, "registeredVisitors"));
 
@@ -104,7 +88,7 @@ export default function RegisteredVisitorTable() {
       id: doc.id,
       name: doc.visitorName,
       identityCardNum: doc.visitorIC,
-      licensePlateNum: doc.visitorCarPlate,
+      carPlateNum: doc.visitorCarPlate,
       telephoneNum: doc.visitorTelNo,
       visitDateTime: formattedDate,
       visitedUnit: doc.visitorVisitedUnit ? doc.visitorVisitedUnit : "-",
@@ -128,7 +112,47 @@ export default function RegisteredVisitorTable() {
 
   const handleEdit = (document) => {
     setSelectedDocument(document);
-    setShowModal(true);
+    setShowEditModal(true);
+  };
+
+  const handleUpdate = (selectedDocument) => {
+    let dateString = selectedDocument.visitDateTime;
+    //The format of the date when no update is done is different from the format when the date is updated (for display purposes the format is changed)
+    let format = ["YYYY-MM-DDTHH:mm:ss.SSSZ", "MM/DD/YYYY h:mm A"];
+    let date = moment(dateString, format);
+
+    console.log(date.toJSON());
+
+    const docRef = doc(db, "registeredVisitors", selectedDocument.id);
+    updateDoc(docRef, {
+      visitorName: selectedDocument.name,
+      visitorIC: selectedDocument.identityCardNum,
+      visitorCarPlate: selectedDocument.carPlateNum,
+      visitorTelNo: selectedDocument.telephoneNum,
+      visitorVisitDateTime: date.toJSON(),
+      visitorVisitedUnit: selectedDocument.visitedUnit,
+      visitorVisitPurpose: selectedDocument.visitingPurpose,
+    });
+    setShowEditModal(false);
+    alert("Visitor details updated successfully!");
+  };
+
+  const handleDelete = (document) => {
+    const docRef = doc(db, "registeredVisitors", document.id);
+    deleteDoc(docRef);
+    alert("Visitor details deleted successfully!");
+  };
+
+  var yesterday = moment().subtract(1, "day");
+  function valid(current) {
+    return current.isAfter(yesterday);
+  }
+
+  let inputProps = {
+    id: "visitDateTime",
+    name: "visitDateTime",
+    className:
+      "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6",
   };
 
   return (
@@ -225,7 +249,7 @@ export default function RegisteredVisitorTable() {
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {document.licensePlateNum}
+                          {document.carPlateNum}
                         </Typography>
                       </Cell>
                       <Cell className="p-4">
@@ -264,17 +288,29 @@ export default function RegisteredVisitorTable() {
                           {document.visitingPurpose}
                         </Typography>
                       </Cell>
-                      <Cell className="p-4">
-                        <Typography
-                          as="a"
-                          href="#"
-                          variant="small"
-                          color="blue"
-                          className="font-medium"
-                          onClick={() => handleEdit(document)}
-                        >
-                          Edit
-                        </Typography>
+                      <Cell className="p-2">
+                        <div className="space-y-2">
+                          <Typography
+                            as="a"
+                            href="#"
+                            variant="small"
+                            color="blue"
+                            className="font-medium text-center"
+                            onClick={() => handleEdit(document)}
+                          >
+                            Edit
+                          </Typography>
+                          <Typography
+                            as="a"
+                            href="#"
+                            variant="small"
+                            color="red"
+                            className="font-medium text-center"
+                            onClick={() => handleDelete(document)}
+                          >
+                            Delete
+                          </Typography>
+                        </div>
                       </Cell>
                     </Row>
                   ))}
@@ -285,43 +321,187 @@ export default function RegisteredVisitorTable() {
         </Card>
       </div>
 
-      {showModal ? (
+      {showEditModal && (
         <>
           <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
             <div className="relative w-auto my-6 mx-auto max-w-3xl">
-              {/*content*/}
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                {/*header*/}
                 <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-                  <h3 className="text-3xl font-semibold">Edit Document</h3>
-                  <button
-                    className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                    onClick={() => setShowModal(false)}
-                  >
-                    <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                      ×
-                    </span>
-                  </button>
+                  <h3 className="text-3xl font-semibold">
+                    Edit Registered Visitor
+                  </h3>
                 </div>
-                {/*body*/}
                 <div className="relative p-6 flex-auto">
-                  <p className="my-4 text-slate-500 text-lg leading-relaxed">
-                    {selectedDocument.id}
-                  </p>
+                  <form>
+                    <div className="flex items-center justify-between space-x-10">
+                      <div className="mb-4">
+                        <label
+                          htmlFor="name"
+                          className="block text-sm font-medium text-slate-700"
+                        >
+                          Name
+                        </label>
+                        <input
+                          type="text"
+                          id="name"
+                          className="mt-2 w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                          value={selectedDocument.name}
+                          onChange={(e) =>
+                            setSelectedDocument({
+                              ...selectedDocument,
+                              name: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                      <div className="mb-4">
+                        <label
+                          htmlFor="identityCardNum"
+                          className="block text-sm font-medium text-slate-700"
+                        >
+                          Identity Card Number
+                        </label>
+                        <input
+                          type="text"
+                          id="identityCardNum"
+                          className="mt-2 w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                          value={selectedDocument.identityCardNum}
+                          onChange={(e) =>
+                            setSelectedDocument({
+                              ...selectedDocument,
+                              identityCardNum: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex row space-x-10">
+                      <div className="mb-4">
+                        <label
+                          htmlFor="carPlateNum"
+                          className="block text-sm font-medium text-slate-700"
+                        >
+                          License Plate Number
+                        </label>
+                        <input
+                          type="text"
+                          id="carPlateNum"
+                          className="mt-2 w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                          value={selectedDocument.carPlateNum}
+                          onChange={(e) =>
+                            setSelectedDocument({
+                              ...selectedDocument,
+                              carPlateNum: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                      <div className="mb-4">
+                        <label
+                          htmlFor="telephoneNum"
+                          className="block text-sm font-medium text-slate-700"
+                        >
+                          Telephone Number
+                        </label>
+                        <input
+                          type="text"
+                          id="telephoneNum"
+                          className="mt-2 w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                          value={selectedDocument.telephoneNum}
+                          onChange={(e) =>
+                            setSelectedDocument({
+                              ...selectedDocument,
+                              telephoneNum: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex row space-x-10">
+                      <div className="mb-4">
+                        <label
+                          htmlFor="visitDateTime"
+                          className="block text-sm font-medium text-slate-700"
+                        >
+                          Visiting Date & Time
+                        </label>
+                        <Datetime
+                          initialValue={selectedDocument.visitDateTime}
+                          onChange={(momentObj) => {
+                            setSelectedDocument((prevState) => ({
+                              ...prevState,
+                              visitDateTime: momentObj
+                                ? momentObj.toJSON()
+                                : selectedDocument.visitDateTime,
+                            }));
+                          }}
+                          inputProps={inputProps}
+                          isValidDate={valid}
+                          required
+                        />
+                      </div>
+                      <div className="mb-4">
+                        <label
+                          htmlFor="visitedUnit"
+                          className="block text-sm font-medium text-slate-700"
+                        >
+                          Visited Unit
+                        </label>
+                        <input
+                          type="text"
+                          id="visitedUnit"
+                          className="mt-2 w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                          value={selectedDocument.visitedUnit}
+                          onChange={(e) =>
+                            setSelectedDocument({
+                              ...selectedDocument,
+                              visitedUnit: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex row space-x-10"></div>
+
+                    <div className="mb-4">
+                      <label
+                        htmlFor="visitingPurpose"
+                        className="block text-sm font-medium text-slate-700"
+                      >
+                        Visiting Purpose
+                      </label>
+                      <input
+                        type="text"
+                        id="visitingPurpose"
+                        className="mt-2 w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        value={selectedDocument.visitingPurpose}
+                        onChange={(e) =>
+                          setSelectedDocument({
+                            ...selectedDocument,
+                            visitingPurpose: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </form>
                 </div>
-                {/*footer*/}
                 <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
                   <button
                     className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
-                    onClick={() => setShowModal(false)}
+                    onClick={() => setShowEditModal(false)}
                   >
                     Close
                   </button>
                   <button
                     className="bg-green-400 text-white active:bg-green-1000 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
-                    onClick={() => setShowModal(false)}
+                    onClick={() => {
+                      handleUpdate(selectedDocument);
+                    }}
                   >
                     Save Changes
                   </button>
@@ -331,7 +511,7 @@ export default function RegisteredVisitorTable() {
           </div>
           <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
         </>
-      ) : null}
+      )}
     </>
   );
 }
