@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import { auth, db } from "firebase.js";
 import { collection, addDoc } from "firebase/firestore";
 
-export default function RegisterSpecialVisitor() {
+export default function RegisterVisitor() {
   const [visitorName, setVisitorName] = useState("");
   const [visitorIC, setVisitorIC] = useState("");
   const [visitorCarPlate, setVisitorCarPlate] = useState("");
@@ -29,11 +29,7 @@ export default function RegisterSpecialVisitor() {
   let inputProps = {
     id: "visitDateTime",
     name: "visitDateTime",
-    // value: `${
-    //   visitorVisitDateTime
-    //     ? moment(visitorVisitDateTime).format("YYYY-MM-DD HH:mm:ss")
-    //     : ""
-    // }`,
+
     className:
       "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6",
   };
