@@ -7,7 +7,7 @@ import {
   query,
   where,
   getDocs,
-  onSnapShot,
+  onSnapshot,
 } from "firebase/firestore";
 import { auth, db } from "firebase.js";
 import moment from "moment";
@@ -41,28 +41,42 @@ export default function RegisteredVisitorTable() {
   //Retrieve all documents from collection registeredVisitors
   useEffect(() => {
     if (!isDataFetched) {
-      fetchRegisteredVisitorsData();
+      listenForRegisteredVisitorsData();
       setIsDataFetched(true);
     }
   }, [isDataFetched]);
 
-  function fetchRegisteredVisitorsData() {
+  // function fetchRegisteredVisitorsData() {
+  //   const q = query(collection(db, "registeredVisitors"));
+  //   const querySnapshot = getDocs(q);
+
+  //   querySnapshot.then((querySnapshot) => {
+  //     //store the number of documents in the collection into a variable
+  //     setNumOfRegisteredVisitors(querySnapshot.size);
+
+  //     setRegisteredVisitorsData((prevArray) => {
+  //       // Update the state by adding the new data to the previous array
+  //       const newData = [];
+  //       querySnapshot.forEach((doc) => {
+  //         newData.push({ id: doc.id, ...doc.data() }); // Include doc.id in the data object
+  //       });
+  //       return [...prevArray, ...newData];
+  //     });
+  //   });
+  // }
+
+  function listenForRegisteredVisitorsData() {
     const q = query(collection(db, "registeredVisitors"));
-    const querySnapshot = getDocs(q);
 
-    querySnapshot.then((querySnapshot) => {
-      //store the number of documents in the collection into a variable
-      setNumOfRegisteredVisitors(querySnapshot.size);
-
-      setRegisteredVisitorsData((prevArray) => {
-        // Update the state by adding the new data to the previous array
-        const newData = [];
-        querySnapshot.forEach((doc) => {
-          newData.push({ id: doc.id, ...doc.data() }); // Include doc.id in the data object
-        });
-        return [...prevArray, ...newData];
-      });
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const updatedData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setRegisteredVisitorsData(updatedData);
     });
+
+    return unsubscribe;
   }
 
   const TABLE_HEAD = [
