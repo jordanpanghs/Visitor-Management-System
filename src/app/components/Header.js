@@ -51,7 +51,7 @@ function NavItems() {
     { id: 4, text: "Parcels", link: "#" },
     {
       id: 2,
-      text: "Register Special Visitor",
+      text: "Register Visitor",
       link: "/register/specialvisitor",
     },
     { id: 1, text: "Create User", link: "#" },
