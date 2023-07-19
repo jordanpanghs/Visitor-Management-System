@@ -9,7 +9,6 @@ function Header() {
   const navItems = NavItems();
 
   const { login, signup, currentUser } = useAuth();
-  console.log(currentUser);
 
   return (
     <header className="bg-white min-w-screen-sm p-5 sticky top-0 z-40 leading-6 px-20 text-xl font-[Roboto] border-b border-slate-900/10">

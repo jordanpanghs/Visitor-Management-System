@@ -6,7 +6,7 @@ import VisitorLogsTable from "./tables/VisitorLogsTable";
 export default function Home() {
   return (
     <div className="flex flex-col justify-start max-h-screen px-20 py-10">
-      <div className="space-y-10">
+      <div className="">
         <VisitorLogsTable />
         <RegisteredVisitorsTable />
       </div>
