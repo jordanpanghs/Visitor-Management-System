@@ -4,11 +4,13 @@ import React, { useEffect, useState } from "react";
 import { Card, Typography, tab } from "@material-tailwind/react";
 import {
   collection,
+  collectionGroup,
   query,
   where,
   getDocs,
   doc,
   onSnapshot,
+  getDoc,
   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
@@ -49,18 +51,41 @@ export default function RegisteredVisitorTable() {
   }, [isDataFetched]);
 
   //Listens to the registeredVisitor collection and updates itself when there are changes
-  function listenForRegisteredVisitorsData() {
-    const q = query(collection(db, "registeredVisitors"));
+  async function listenForRegisteredVisitorsData() {
+    try {
+      const q = query(
+        collectionGroup(db, "userRegisteredVisitors"),
+        where("isCheckedIn", "==", false),
+        where("isCheckedOut", "==", false)
+      );
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const updatedData = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setRegisteredVisitorsData(updatedData);
-    });
-
-    return unsubscribe;
+      const unsubscribe = onSnapshot(
+        q,
+        async (snapshot) => {
+          const updatedData = [];
+          for (const doc of snapshot.docs) {
+            const parentDoc = await getDoc(doc.ref.parent.parent);
+            const data = {
+              id: doc.id,
+              date: new Date(doc.data().visitorVisitDateTime).toLocaleString(),
+              residentName: parentDoc.data().residentName,
+              residentTelNo: parentDoc.data().residentTelNo,
+              ...doc.data(),
+            };
+            updatedData.push(data);
+          }
+          console.log(updatedData);
+          setRegisteredVisitorsData(updatedData);
+          setIsDataFetched(true);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+      return unsubscribe;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const TABLE_HEAD = [
@@ -70,8 +95,10 @@ export default function RegisteredVisitorTable() {
     "License Plate Number",
     "Telephone Number",
     "Visiting Date & Time",
-    "Visited Unit",
+    "Visiting Unit",
     "Visiting Purpose",
+    "Resident Name",
+    "Resident Tel No",
     "",
   ];
 
@@ -91,8 +118,10 @@ export default function RegisteredVisitorTable() {
       carPlateNum: doc.visitorCarPlate,
       telephoneNum: doc.visitorTelNo,
       visitDateTime: formattedDate,
-      visitedUnit: doc.visitorVisitedUnit ? doc.visitorVisitedUnit : "-",
+      visitedUnit: doc.visitorVisitingUnit,
       visitingPurpose: doc.visitorVisitPurpose,
+      residentName: doc.residentName,
+      residentTelNo: doc.residentTelNo,
     };
   });
 
@@ -161,7 +190,7 @@ export default function RegisteredVisitorTable() {
 
   return (
     <>
-      <div className="space-y-10 py-12">
+      <div className="space-y-10 pb-12">
         <div>
           <h1 className="text-left mb-8 pl-5 text-2xl font-medium">
             Registered Visitors
@@ -195,7 +224,7 @@ export default function RegisteredVisitorTable() {
           <Table
             data={data}
             className="w-full min-w-max table-auto text-left"
-            style={{ gridTemplateColumns: "repeat(9, auto)" }}
+            style={{ gridTemplateColumns: "repeat(11, auto)" }}
           >
             {(tableList) => (
               <>
@@ -290,6 +319,24 @@ export default function RegisteredVisitorTable() {
                           className="font-normal"
                         >
                           {document.visitingPurpose}
+                        </Typography>
+                      </Cell>
+                      <Cell className="p-4">
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {document.residentName}
+                        </Typography>
+                      </Cell>
+                      <Cell className="p-4">
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {document.residentTelNo}
                         </Typography>
                       </Cell>
                       <Cell className="p-2">

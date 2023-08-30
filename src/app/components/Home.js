@@ -7,8 +7,8 @@ export default function Home() {
   return (
     <div className="flex flex-col justify-start max-h-screen px-20 py-10">
       <div className="">
-        <VisitorLogsTable />
         <RegisteredVisitorsTable />
+        <VisitorLogsTable />
       </div>
     </div>
   );
