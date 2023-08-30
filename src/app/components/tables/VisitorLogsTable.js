@@ -235,11 +235,11 @@ export default function RegisteredVisitorTable() {
           </div>
         </div>
 
-        <Card className="overflow-scroll h-full w-full">
+        <Card className="overflow-auto w-full">
           <Table
             data={data}
             className="w-full min-w-max table-auto text-left"
-            style={{ gridTemplateColumns: "repeat(16, auto)" }}
+            style={{ gridTemplateColumns: "repeat(16, auto)", height: "36vh" }}
           >
             {(tableList) => (
               <>
@@ -385,7 +385,7 @@ export default function RegisteredVisitorTable() {
                             <span className="relative block">
                               <img
                                 src={document.driverLicenseImage}
-                                alt="image"
+                                alt="driver license image"
                                 height="150"
                                 width="150"
                                 className=""
@@ -404,7 +404,7 @@ export default function RegisteredVisitorTable() {
                             <span className="relative block">
                               <img
                                 src={document.carPlateImage}
-                                alt="image"
+                                alt="car plate image"
                                 height="150"
                                 width="150"
                                 className=""
@@ -423,7 +423,7 @@ export default function RegisteredVisitorTable() {
                             <span className="relative block">
                               <img
                                 src={document.exitCarImage}
-                                alt="image"
+                                alt="visitor exit image"
                                 height="150"
                                 width="150"
                                 className=""

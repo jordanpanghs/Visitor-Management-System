@@ -45,7 +45,7 @@ function Header() {
 function NavItems() {
   //Navigation Link Items
   return [
-    { id: 3, text: "Visits", link: "#" },
+    { id: 3, text: "Visits", link: "/" },
     { id: 4, text: "Parcels", link: "#" },
     {
       id: 2,
