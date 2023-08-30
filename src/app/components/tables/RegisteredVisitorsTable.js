@@ -66,6 +66,7 @@ export default function RegisteredVisitorTable() {
           for (const doc of snapshot.docs) {
             const parentDoc = await getDoc(doc.ref.parent.parent);
             const data = {
+              docRef: doc.ref,
               id: doc.id,
               date: new Date(doc.data().visitorVisitDateTime).toLocaleString(),
               residentName: parentDoc.data().residentName,
@@ -112,6 +113,7 @@ export default function RegisteredVisitorTable() {
     const formattedDate = date.format("MM/DD/YYYY h:mm A");
 
     return {
+      docRef: doc.docRef,
       id: doc.id,
       name: doc.visitorName,
       identityCardNum: doc.visitorIC,
@@ -140,6 +142,7 @@ export default function RegisteredVisitorTable() {
   };
 
   const handleEdit = (document) => {
+    console.log(document);
     setSelectedDocument(document);
     setShowEditModal(true);
   };
@@ -152,7 +155,7 @@ export default function RegisteredVisitorTable() {
 
     console.log(date.toJSON());
 
-    const docRef = doc(db, "registeredVisitors", selectedDocument.id);
+    const docRef = selectedDocument.docRef;
     updateDoc(docRef, {
       visitorName: selectedDocument.name,
       visitorIC: selectedDocument.identityCardNum,
@@ -169,7 +172,7 @@ export default function RegisteredVisitorTable() {
   const handleDelete = (document) => {
     const result = window.confirm("Do you want to delete this entry?");
     if (result) {
-      const docRef = doc(db, "registeredVisitors", document.id);
+      const docRef = document.docRef;
       deleteDoc(docRef);
       alert("Visitor details deleted successfully!");
     } else {
