@@ -17,6 +17,8 @@ import {
 import { auth, db } from "firebase.js";
 import moment from "moment";
 
+import Link from "next/link";
+
 import {
   Table,
   Header,
@@ -31,34 +33,32 @@ import {
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 
-import Link from "next/link";
-
-export default function RegisteredVisitorTable() {
-  const [registeredVisitorsData, setRegisteredVisitorsData] = useState([]);
-  const [numOfRegisteredVisitors, setNumOfRegisteredVisitors] = useState("");
+export default function RegisteredParcelsTable() {
+  const [registeredParcelsData, setRegisteredParcelsData] = useState([]);
+  const [numOfRegisteredParcels, setNumOfRegisteredParcels] = useState("");
   const [isDataFetched, setIsDataFetched] = useState(false);
 
   const [search, setSearch] = useState("");
-  const [searchField, setSearchField] = useState("name");
+  const [searchField, setSearchField] = useState("receiverName");
 
   const [showEditModal, setShowEditModal] = React.useState(false);
   const [selectedDocument, setSelectedDocument] = useState("");
 
-  //Retrieve all documents from collection registeredVisitors
+  //Retrieve all documents from collection registeredParcels
   useEffect(() => {
     if (!isDataFetched) {
-      listenForRegisteredVisitorsData();
+      listenForRegisteredParcelsData();
       setIsDataFetched(true);
     }
   }, [isDataFetched]);
 
   //Listens to the registeredVisitor collection and updates itself when there are changes
-  async function listenForRegisteredVisitorsData() {
+  async function listenForRegisteredParcelsData() {
     try {
       const q = query(
-        collectionGroup(db, "userRegisteredVisitors"),
-        where("isCheckedIn", "==", true),
-        where("isCheckedOut", "==", true)
+        collectionGroup(db, "userRegisteredParcels"),
+        where("hasArrived", "==", true),
+        where("isClaimed", "==", true)
       );
 
       const unsubscribe = onSnapshot(
@@ -70,16 +70,13 @@ export default function RegisteredVisitorTable() {
             const data = {
               docRef: doc.ref,
               id: doc.id,
-              date: new Date(doc.data().visitorVisitDateTime).toLocaleString(),
-              residentName: parentDoc.data().residentName,
-              residentTelNo: parentDoc.data().residentTelNo,
+              residentUnit: parentDoc.data().residentUnit,
               ...doc.data(),
             };
             updatedData.push(data);
           }
           console.log(updatedData);
-          setRegisteredVisitorsData(updatedData);
-          setIsDataFetched(true);
+          setRegisteredParcelsData(updatedData);
         },
         (error) => {
           console.log(error);
@@ -93,49 +90,28 @@ export default function RegisteredVisitorTable() {
 
   const TABLE_HEAD = [
     "Document ID",
-    "Name",
-    "Identity Card Number",
-    "License Plate Number",
-    "Telephone Number",
-    "Visited Date & Time",
-    "Visited Unit",
-    "Visit Purpose",
-    "Resident Name",
-    "Resident Tel No",
-    "Entry Date Time",
-    "Exit Date Time",
-    "Driver License Image",
-    "Car Plate Image",
-    "Exit Car Image",
+    "Parcel Tracking Number",
+    "Parcel Receiver Name",
+    "Parcel Receiver IC Number",
+    "Parcel Receiver Telephone Number",
+    "Parcel Receiver Unit",
+    "Parcel Image",
+    "Parcel Redeemer IC Image",
     "",
   ];
 
   //write each document retrieved in registeredVisitorsData into each row in the table
-  const TABLE_ROWS_DATA = registeredVisitorsData.map((doc) => {
-    //Convert date object into formatted date string
-    const dateString = doc.visitorVisitDateTime;
-    const format = "YYYY-MM-DDTHH:mm:ss.SSSZ";
-    const date = moment(dateString, format);
-
-    const formattedDate = date.format("MM/DD/YYYY h:mm A");
-
+  const TABLE_ROWS_DATA = registeredParcelsData.map((doc) => {
     return {
       docRef: doc.docRef,
       id: doc.id,
-      name: doc.visitorName,
-      identityCardNum: doc.visitorIC,
-      carPlateNum: doc.visitorCarPlate,
-      telephoneNum: doc.visitorTelNo,
-      visitDateTime: formattedDate,
-      visitedUnit: doc.visitorVisitingUnit,
-      visitingPurpose: doc.visitorVisitPurpose,
-      residentName: doc.residentName,
-      residentTelNo: doc.residentTelNo,
-      entryTime: new Date(doc.entryTime).toLocaleString(),
-      exitTime: new Date(doc.exitTime).toLocaleString(),
-      driverLicenseImage: doc.driversLicenseImageURL,
-      carPlateImage: doc.carPlateImageURL,
-      exitCarImage: doc.visitorExitImageURL,
+      receiverName: doc.parcelReceiverName,
+      receiverIC: doc.parcelReceiverIC,
+      telephoneNum: doc.parcelReceiverTelNo,
+      trackingNumber: doc.parcelTrackingNumber,
+      residentUnit: doc.residentUnit,
+      parcelImage: doc.parcelImageURL,
+      redeemerImage: doc.redeemerICImageURL,
     };
   });
 
@@ -158,7 +134,7 @@ export default function RegisteredVisitorTable() {
       <div className="space-y-10 pb-12">
         <div>
           <h1 className="text-left mb-8 pl-5 text-2xl font-medium">
-            Past Visitor Logs
+            Redeemed Parcels History
           </h1>
           <div className="flex row space-x-5">
             <label htmlFor="search" className="flex row items-center space-x-3">
@@ -169,9 +145,9 @@ export default function RegisteredVisitorTable() {
                 value={searchField}
                 onChange={handleSearchFieldChange}
               >
-                <option value="identityCardNum">IC Number</option>
-                <option value="name">Name</option>
-                <option value="visitDateTime">Date & Time</option>
+                <option value="receiverIC">IC Number</option>
+                <option value="receiverName">Name</option>
+                <option value="trackingNumber">Tracking Number</option>
               </select>
               <input
                 className="text-sm rounded-sm"
@@ -189,7 +165,7 @@ export default function RegisteredVisitorTable() {
           <Table
             data={data}
             className="w-full min-w-max table-auto text-left"
-            style={{ gridTemplateColumns: "repeat(16, auto)", height: "36vh" }}
+            style={{ gridTemplateColumns: "repeat(9, auto)", height: "36vh" }}
           >
             {(tableList) => (
               <>
@@ -211,7 +187,7 @@ export default function RegisteredVisitorTable() {
                     ))}
                   </HeaderRow>
                 </Header>
-                <Body>
+                <Body className="max-h-min">
                   {tableList.map((document) => (
                     <Row key={document.id} className="even:bg-blue-gray-50/50">
                       <Cell className="p-4">
@@ -229,7 +205,7 @@ export default function RegisteredVisitorTable() {
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {document.name}
+                          {document.trackingNumber}
                         </Typography>
                       </Cell>
                       <Cell className="p-4">
@@ -238,7 +214,7 @@ export default function RegisteredVisitorTable() {
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {document.identityCardNum}
+                          {document.receiverName}
                         </Typography>
                       </Cell>
                       <Cell className="p-4">
@@ -247,7 +223,7 @@ export default function RegisteredVisitorTable() {
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {document.carPlateNum}
+                          {document.receiverIC}
                         </Typography>
                       </Cell>
                       <Cell className="p-4">
@@ -265,61 +241,7 @@ export default function RegisteredVisitorTable() {
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {document.visitDateTime}
-                        </Typography>
-                      </Cell>
-                      <Cell className="p-4">
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal"
-                        >
-                          {document.visitedUnit}
-                        </Typography>
-                      </Cell>
-                      <Cell className="p-4">
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal"
-                        >
-                          {document.visitingPurpose}
-                        </Typography>
-                      </Cell>
-                      <Cell className="p-4">
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal"
-                        >
-                          {document.residentName}
-                        </Typography>
-                      </Cell>
-                      <Cell className="p-4">
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal"
-                        >
-                          {document.residentTelNo}
-                        </Typography>
-                      </Cell>
-                      <Cell className="p-4">
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal"
-                        >
-                          {document.entryTime}
-                        </Typography>
-                      </Cell>
-                      <Cell className="p-4">
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal"
-                        >
-                          {document.exitTime}
+                          {document.residentUnit}
                         </Typography>
                       </Cell>
                       <Cell className="p-4 relative">
@@ -328,14 +250,11 @@ export default function RegisteredVisitorTable() {
                           color="blue-gray"
                           className="font-normal"
                         >
-                          <Link
-                            href={document.driverLicenseImage}
-                            className="group"
-                          >
+                          <Link href={document.parcelImage} className="group">
                             <span className="relative block">
                               <img
-                                src={document.driverLicenseImage}
-                                alt="driver license image"
+                                src={document.parcelImage}
+                                alt="parcel image"
                                 height="150"
                                 width="150"
                                 className=""
@@ -344,36 +263,17 @@ export default function RegisteredVisitorTable() {
                           </Link>
                         </Typography>
                       </Cell>
-                      <Cell className="p-4">
+                      <Cell className="p-4 relative">
                         <Typography
                           variant="small"
                           color="blue-gray"
                           className="font-normal"
                         >
-                          <Link href={document.carPlateImage} className="group">
+                          <Link href={document.redeemerImage} className="group">
                             <span className="relative block">
                               <img
-                                src={document.carPlateImage}
-                                alt="car plate image"
-                                height="150"
-                                width="150"
-                                className=""
-                              />
-                            </span>
-                          </Link>
-                        </Typography>
-                      </Cell>
-                      <Cell className="p-4">
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal"
-                        >
-                          <Link href={document.exitCarImage} className="group">
-                            <span className="relative block">
-                              <img
-                                src={document.exitCarImage}
-                                alt="visitor exit image"
+                                src={document.redeemerImage}
+                                alt="parcel redeem ic image"
                                 height="150"
                                 width="150"
                                 className=""

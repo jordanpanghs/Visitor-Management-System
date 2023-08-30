@@ -46,7 +46,7 @@ function NavItems() {
   //Navigation Link Items
   return [
     { id: 3, text: "Visits", link: "/" },
-    { id: 4, text: "Parcels", link: "#" },
+    { id: 4, text: "Parcels", link: "/parcels" },
     {
       id: 2,
       text: "Register Visitor",
