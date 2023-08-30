@@ -9,7 +9,9 @@ import "react-datetime/css/react-datetime.css";
 import { useRouter } from "next/navigation";
 
 import { auth, db } from "firebase.js";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, doc } from "firebase/firestore";
+
+import { useAuth } from "../context/AuthContext";
 
 export default function RegisterVisitor() {
   const [visitorName, setVisitorName] = useState("");
@@ -18,6 +20,9 @@ export default function RegisterVisitor() {
   const [visitorTelNo, setVisitorTelNo] = useState("");
   const [visitorVisitDateTime, setVisitorVisitDateTime] = useState("");
   const [visitorVisitPurpose, setVisitorVisitPurpose] = useState("");
+
+  const { currentUser, userResidentUnit } = useAuth();
+
   const router = useRouter();
 
   //To prevent past dates from being picked
@@ -35,8 +40,25 @@ export default function RegisterVisitor() {
   };
 
   function addVisitor() {
-    const dbInstance = collection(db, "registeredVisitors");
-    addDoc(dbInstance, {
+    if (
+      visitorName.trim() === "" ||
+      visitorIC.trim() === "" ||
+      visitorCarPlate.trim() === "" ||
+      visitorTelNo.trim() === "" ||
+      visitorVisitDateTime.trim() === "" ||
+      visitorVisitPurpose.trim() === ""
+    ) {
+      alert("Please fill in all required fields");
+      return;
+    }
+
+    const userDocRef = doc(db, "users", currentUser.uid);
+
+    const userRegisteredVisitorsRef = collection(
+      userDocRef,
+      "userRegisteredVisitors"
+    );
+    addDoc(userRegisteredVisitorsRef, {
       //add visitor id according to the number of documents in the collection
       visitorName: visitorName,
       visitorIC: visitorIC,
@@ -44,6 +66,12 @@ export default function RegisterVisitor() {
       visitorTelNo: visitorTelNo,
       visitorVisitDateTime: visitorVisitDateTime,
       visitorVisitPurpose: visitorVisitPurpose,
+      visitorVisitingUnit: userResidentUnit,
+      isCheckedIn: false,
+      isCheckedOut: false,
+      entryTime: "",
+      exitTime: "",
+      hasVisited: false,
     }).then(() => {
       setVisitorName("");
       setVisitorIC("");
@@ -61,11 +89,6 @@ export default function RegisterVisitor() {
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-32 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            className="mx-auto h-10 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-            alt="Your Company"
-          />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Register Visitor
           </h2>

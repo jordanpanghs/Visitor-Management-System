@@ -21,6 +21,9 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
+  const [userIsSecurity, setUserIsSecurity] = useState(null);
+  const [userResidentUnit, setUserResidentUnit] = useState(null);
+
   //Creates user and updates their display name
   function signup(name, email, password) {
     createUserWithEmailAndPassword(auth, email, password)
@@ -47,13 +50,31 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
-      setLoading(false);
+
+      if (user) {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setUserIsSecurity(userData.isSecurity);
+          setUserResidentUnit(userData.residentUnit);
+        }
+        setLoading(false);
+      } else {
+        setUserIsSecurity(false);
+        setUserResidentUnit(null);
+        setLoading(false);
+      }
     });
+
     return unsubscribe;
   }, []);
 
   const value = {
     currentUser,
+    userIsSecurity,
+    userResidentUnit,
     login,
     signup,
     logout,
