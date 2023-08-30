@@ -97,7 +97,6 @@ export default function RegisteredParcelsTable() {
     "Parcel Receiver Unit",
     "Parcel Image",
     "Parcel Redeemer IC Image",
-    "",
   ];
 
   //write each document retrieved in registeredVisitorsData into each row in the table
@@ -165,7 +164,7 @@ export default function RegisteredParcelsTable() {
           <Table
             data={data}
             className="w-full min-w-max table-auto text-left"
-            style={{ gridTemplateColumns: "repeat(9, auto)", height: "36vh" }}
+            style={{ gridTemplateColumns: "repeat(8, auto)", height: "36vh" }}
           >
             {(tableList) => (
               <>
