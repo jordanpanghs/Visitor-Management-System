@@ -111,7 +111,12 @@ export default function RegisterVisitor() {
                     type="text"
                     autoComplete="text"
                     required
-                    onChange={(e) => setVisitorName(e.target.value)}
+                    // onChange={(e) => setVisitorName(e.target.value)}
+                    onChange={(e) =>
+                      setVisitorName(
+                        e.target.value.replace(/[^a-zA-Z\s]/g, "").toUpperCase()
+                      )
+                    }
                     value={visitorName}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
@@ -132,7 +137,9 @@ export default function RegisterVisitor() {
                     type="text"
                     autoComplete="text"
                     required
-                    onChange={(e) => setVisitorIC(e.target.value)}
+                    onChange={(e) =>
+                      setVisitorIC(e.target.value.replace(/[^0-9]/g, ""))
+                    }
                     value={visitorIC}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
@@ -176,7 +183,9 @@ export default function RegisterVisitor() {
                     type="text"
                     autoComplete="tel"
                     required
-                    onChange={(e) => setVisitorTelNo(e.target.value)}
+                    onChange={(e) =>
+                      setVisitorTelNo(e.target.value.replace(/[^0-9]/g, ""))
+                    }
                     value={visitorTelNo}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
