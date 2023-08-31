@@ -98,22 +98,7 @@ function UserDropDown() {
                   active ? "bg-blue-400 text-white" : "text-gray-900"
                 } group flex w-full justify-center rounded-md px-2 py-2 text-sm`}
               >
-                <a className="" href="#">
-                  Account settings
-                </a>
-              </button>
-            )}
-          </Menu.Item>
-          <Menu.Item>
-            {({ active }) => (
-              <button
-                className={`${
-                  active ? "bg-blue-400 text-white" : "text-gray-900"
-                } group flex w-full justify-center rounded-md px-2 py-2 text-sm`}
-              >
-                <a className="" href="#">
-                  Account settings
-                </a>
+                <Link href="/accountsettings">Account settings</Link>
               </button>
             )}
           </Menu.Item>
