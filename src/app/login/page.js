@@ -18,5 +18,11 @@ export default function LoginPage() {
     }
   });
 
-  return <>{!currentUser && <Login />}</>;
+  return (
+    <>
+      <div className="justify-center items-center min-h-screen">
+        {!currentUser && <Login />}
+      </div>
+    </>
+  );
 }

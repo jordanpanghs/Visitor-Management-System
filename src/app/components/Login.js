@@ -11,10 +11,6 @@ export default function Login() {
   const { login, signup, currentUser } = useAuth();
 
   async function submitHandler() {
-    if (!isLoggingIn && !name) {
-      setError("Please enter your name");
-      return;
-    }
     if (!email || !password) {
       setError("Please enter email and password");
       return;
@@ -32,9 +28,12 @@ export default function Login() {
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-      <h1 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-        {isLoggingIn ? "Sign in to your account" : "Register an account"}
+      <h1 className="mt-40 text-center text-3xl leading-9 text-gray-900">
+        Visitor Management System
       </h1>
+      <h2 className="mt-20 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+        Sign in to your account
+      </h2>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm space-y-6">
         <div>
@@ -43,27 +42,6 @@ export default function Login() {
               {error}
             </div>
           )}
-        </div>
-        <div>
-          {!isLoggingIn && (
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Full Name
-            </label>
-          )}
-          <div className="mt-2">
-            {!isLoggingIn && (
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Full Name"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            )}
-          </div>
         </div>
 
         <div>
@@ -94,14 +72,6 @@ export default function Login() {
             >
               Password
             </label>
-            <div className="text-sm">
-              <a
-                href="#"
-                className="font-semibold text-indigo-600 hover:text-indigo-500"
-              >
-                Forgot password?
-              </a>
-            </div>
           </div>
           <div className="mt-2">
             <input
@@ -124,16 +94,6 @@ export default function Login() {
             <h2 className="relative z-20">SUBMIT</h2>
           </button>
         </div>
-
-        <p className="mt-10 text-center text-sm text-gray-500">
-          {!isLoggingIn ? "Have an account?  " : "Not a member?  "}
-          <button
-            onClick={() => setIsLoggingIn(!isLoggingIn)}
-            className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-          >
-            {!isLoggingIn ? "Login" : "Register"}
-          </button>
-        </p>
       </div>
     </div>
   );

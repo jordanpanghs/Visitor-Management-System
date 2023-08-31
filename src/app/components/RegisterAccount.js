@@ -26,6 +26,7 @@ export default function RegisterAccount() {
   async function submitHandler() {
     if (!name || !email || !password || !userType) {
       setError("Please fill in all fields");
+      alert("lmfao");
       return;
     }
 
@@ -77,9 +78,9 @@ export default function RegisterAccount() {
   }
 
   return (
-    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-      <h1 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-        Register an account
+    <div className="flex-1 flex-col justify-center px-6 lg:px-8">
+      <h1 className="mt-20 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+        Create a New User Account
       </h1>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm space-y-6">

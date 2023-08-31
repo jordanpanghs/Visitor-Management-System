@@ -23,6 +23,7 @@ export function AuthProvider({ children }) {
 
   const [userIsSecurity, setUserIsSecurity] = useState(null);
   const [userResidentUnit, setUserResidentUnit] = useState(null);
+  const [userIsAdmin, setUserIsAdmin] = useState(null);
 
   //Creates user and updates their display name
   function signup(name, email, password) {
@@ -59,6 +60,7 @@ export function AuthProvider({ children }) {
           const userData = userDoc.data();
           setUserIsSecurity(userData.isSecurity);
           setUserResidentUnit(userData.residentUnit);
+          setUserIsAdmin(userData.isAdmin);
         }
         setLoading(false);
       } else {
@@ -73,6 +75,7 @@ export function AuthProvider({ children }) {
 
   const value = {
     currentUser,
+    userIsAdmin,
     userIsSecurity,
     userResidentUnit,
     login,
