@@ -14,7 +14,7 @@ export default function LoginPage() {
     if (currentUser) {
       router.back();
     } else if (currentUser && typeof window !== "undefined") {
-      router.push("/dashboard");
+      router.push("/");
     }
   });
 

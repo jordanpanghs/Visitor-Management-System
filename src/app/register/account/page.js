@@ -1,7 +1,7 @@
 "use client";
 
 import Header from "../../components/Header";
-import RegisterVisitor from "../../components/RegisterVisitor";
+import RegisterAccount from "../../components/RegisterAccount";
 import { useAuth } from "../../context/AuthContext";
 
 export default function DashboardPage() {
@@ -10,7 +10,7 @@ export default function DashboardPage() {
   return (
     <>
       {currentUser && <Header />}
-      {currentUser && <RegisterVisitor />}
+      {currentUser && <RegisterAccount />}
     </>
   );
 }

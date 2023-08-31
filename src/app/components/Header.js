@@ -50,9 +50,9 @@ function NavItems() {
     {
       id: 2,
       text: "Register Visitor",
-      link: "/register/specialvisitor",
+      link: "/register/visitor",
     },
-    { id: 1, text: "Create User", link: "#" },
+    { id: 1, text: "Create User", link: "/register/account" },
   ];
 }
 
