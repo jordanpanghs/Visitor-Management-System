@@ -38,8 +38,8 @@ jobs:
       - name: Build and push the docker image to Artifact Registry
         run: |-
           gcloud auth configure-docker asia-east1-docker.pkg.dev
-          docker build . --tag asia-east1-docker.pkg.dev/visitor-management-syste-3f0f7/visitor-management-system
-          docker push asia-east1-docker.pkg.dev/visitor-management-syste-3f0f7/visitor-management-system
+          docker build . --tag asia-east1-docker.pkg.dev/visitor-management-syste-3f0f7/visitor-management-system/demo/nextjs-cloud-run:latest
+          docker push asia-east1-docker.pkg.dev/visitor-management-syste-3f0f7/visitor-management-system/demo/nextjs-cloud-run:latest
 
       - name: Deploy
         run: |-
