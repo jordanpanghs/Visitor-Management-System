@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - main
+  workflow_dispatch:
 
 env:
   PROJECT_ID: ${{ secrets.CLOUD_RUN_PROJECT_NAME }}
