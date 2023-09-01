@@ -45,6 +45,6 @@ jobs:
         run: |-
           gcloud run deploy $REPO_NAME \
           --region $REGION \
-          --image gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA \
+          --image asia-east1-docker.pkg.dev/visitor-management-syste-3f0f7/visitor-management-system/demo/nextjs-cloud-run:latest \
           --platform "managed" \
           --quiet
