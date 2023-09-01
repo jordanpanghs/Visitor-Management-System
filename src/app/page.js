@@ -7,6 +7,11 @@ import Unverified from "./components/Unverified.js";
 
 import { useAuth } from "./context/AuthContext.js";
 
+export const metadata = {
+  title: "Visitor Management System",
+  description: "By Jordan Pang",
+};
+
 export default function Page() {
   const { currentUser, userIsAdmin } = useAuth();
   return (
