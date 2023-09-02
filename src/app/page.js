@@ -1,7 +1,7 @@
 "use client";
 
 import RegisteredVisitorTable from "./components/tables/RegisteredVisitorsTable.js";
-import VisitorLogsTable from "./components/tables/RedeemedParcelsTable.js";
+import VisitorLogsTable from "./components/tables/VisitorLogsTable.js";
 import Header from "./components/Header.js";
 import Unverified from "./components/Unverified.js";
 
