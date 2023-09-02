@@ -188,7 +188,7 @@ export default function RegisteredVisitorTable() {
           <Table
             data={data}
             className="w-full min-w-max table-auto text-left"
-            style={{ gridTemplateColumns: "repeat(16, auto)", height: "36vh" }}
+            style={{ gridTemplateColumns: "repeat(15, auto)", height: "36vh" }}
           >
             {(tableList) => (
               <>
