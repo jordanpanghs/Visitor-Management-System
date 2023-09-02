@@ -107,7 +107,6 @@ export default function RegisteredVisitorTable() {
     "Driver License Image",
     "Car Plate Image",
     "Exit Car Image",
-    "",
   ];
 
   //write each document retrieved in registeredVisitorsData into each row in the table
